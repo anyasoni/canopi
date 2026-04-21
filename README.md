@@ -16,21 +16,32 @@ yarn dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+AI-backed deforestation reports use the Anthropic API when a key is present.
 
-## Learn More
+1. Copy the example file:
 
-To learn more about Next.js, take a look at the following resources:
+   ```bash
+   cp .env.example .env.local
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2. Set `ANTHROPIC_API_KEY` in `.env.local` (see [Anthropic console](https://console.anthropic.com/)).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+If the key is missing or empty, `POST /api/report` still works and returns the **rule-based fallback** report. In production (for example on Vercel), configure the same variable in the project’s environment settings instead of committing secrets.
 
-## Deploy on Vercel
+## Tests
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Unit tests use [Vitest](https://vitest.dev/). After `yarn install`, run:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+yarn test
+```
+
+That starts Vitest in watch mode. For a single run (for example in CI), use:
+
+```bash
+yarn test:run
+```
+
+Test files live next to the code they cover, named `*.test.ts` (for example under `src/lib/`).
