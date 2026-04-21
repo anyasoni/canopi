@@ -17,6 +17,14 @@ Implement work so that **every acceptance criterion and requirement from the pro
 - Use **early returns** and guard clauses so the happy path stays shallow and nested `if` / `else` ladders stay rare.
 - Prefer **receive an object, return an object**: use a single options/params object instead of long positional parameter lists, and return a small named object (or typed result shape) when multiple values leave a function—this keeps call sites and signatures easier to read and extend.
 
+## Tests
+
+- **Add automated tests wherever they add real value**: pure logic, parsers, transforms, reducers, and non-trivial branches deserve tests first.
+- Keep tests **explicit**: names and structure should state the behavior under test (inputs, action, expected outcome); avoid vague descriptions like “works” or “handles correctly” without saying what correct means.
+- Avoid **redundant** tests: do not repeat the same scenario with copy-pasted cases; merge overlaps and reserve separate tests for distinct behaviors or edge cases.
+- Keep tests **concise**: minimal setup per case, shared fixtures only when they stay obvious; prefer clear assertion targets per test when that keeps failure messages obvious.
+- Tests should **reflect functionality** as callers and users experience it—assert public outcomes and contracts, not private implementation details, unless stability of an internal invariant is explicitly required.
+
 ## Styling (Tailwind CSS)
 
 - Use Tailwind **correctly**: semantic layout and tokens, responsive and state variants only when needed, no duplicate utility chains for the same visual result.
