@@ -1,0 +1,1165 @@
+{
+    "commodities": [
+      {
+        "id": "palm-oil",
+        "name": "Palm Oil",
+        "deforestation_link": "Leading driver of tropical deforestation — plantations replace rainforest, destroying habitat for orangutans, tigers, and thousands of species.",
+        "key_regions": [
+          "Malaysia",
+          "Indonesia"
+        ],
+        "scale": "Responsible for ~8% of global deforestation (2015-2018). Over 10 million hectares of tropical forest cleared for palm since 1990."
+      },
+      {
+        "id": "cocoa",
+        "name": "Cocoa",
+        "deforestation_link": "Major driver of deforestation in West Africa — Ghana and Côte d'Ivoire have lost millions of hectares of forest to cocoa expansion.",
+        "key_regions": [
+          "Côte d'Ivoire",
+          "Ghana",
+          "Indonesia",
+          "Liberia"
+        ],
+        "scale": "Cocoa farming has caused ~2-3 million hectares of deforestation in West Africa. Côte d'Ivoire has lost 80% of its forests since 1960."
+      },
+      {
+        "id": "soy",
+        "name": "Soy",
+        "deforestation_link": "Soy expansion drives deforestation in South America, particularly Brazil's Cerrado and Amazon regions. Mostly used for animal feed, not directly in food.",
+        "key_regions": [
+          "Brazil",
+          "Argentina",
+          "Paraguay"
+        ],
+        "scale": "~480,000 hectares deforested annually for soy in tropical countries. Second largest driver of deforestation globally."
+      },
+      {
+        "id": "coffee",
+        "name": "Coffee",
+        "deforestation_link": "Sun-grown coffee replaces forest canopy. Shade-grown coffee is less destructive but most commercial production uses sun-grown methods.",
+        "key_regions": [
+          "Brazil",
+          "Vietnam",
+          "Colombia",
+          "Indonesia"
+        ],
+        "scale": "2.5 million hectares of forest cleared for coffee since 2000, primarily in tropical highlands."
+      },
+      {
+        "id": "tea",
+        "name": "Tea",
+        "deforestation_link": "Tea plantations can expand into forested areas, though the link is less direct than palm oil or cocoa.",
+        "key_regions": [
+          "India",
+          "Kenya",
+          "Sri Lanka",
+          "China"
+        ],
+        "scale": "Lower deforestation impact than other commodities but still contributes to habitat conversion in some regions."
+      },
+      {
+        "id": "dairy-feed",
+        "name": "Dairy / Cattle Feed (indirect)",
+        "deforestation_link": "Dairy cows are often fed imported soy. The product itself doesn't contain deforestation-risk ingredients, but the supply chain does.",
+        "key_regions": [
+          "Brazil",
+          "Argentina"
+        ],
+        "scale": "Indirect link — European livestock consumes ~30 million tonnes of soy annually, much of it from deforestation-risk regions."
+      }
+    ],
+    "companies": [
+      {
+        "id": "ferrero",
+        "name": "Ferrero Group",
+        "deforestation_policy": "Ferrero Palm Oil Charter (2013)",
+        "traceability_summary": "100% RSPO Segregated palm oil, traceable to mill level. Working toward plantation-level traceability.",
+        "sourcing_regions": [
+          "Malaysia",
+          "Indonesia"
+        ],
+        "certifications": [
+          "RSPO Segregated"
+        ],
+        "incidents": [],
+        "ngos_score": "WWF Palm Oil Buyers Scorecard 2020: ranked #1 out of 173 companies"
+      },
+      {
+        "id": "mondelez",
+        "name": "Mondelēz International",
+        "deforestation_policy": "Cocoa Life Programme",
+        "traceability_summary": "Farm-level GPS mapping in Ghana and Côte d'Ivoire. Claims near-zero deforestation on Cocoa Life farms. However, mass balance purchasing means certified and uncertified cocoa can mix.",
+        "sourcing_regions": [
+          "Ghana",
+          "Côte d'Ivoire",
+          "Indonesia",
+          "Liberia"
+        ],
+        "certifications": [
+          "Cocoa Life (in-house)"
+        ],
+        "incidents": [
+          {
+            "year": 2019,
+            "source": "Channel 4",
+            "summary": "Investigation found child labour and illegal deforestation in Ghana farms supplying Mondelēz"
+          },
+          {
+            "year": 2025,
+            "source": "Global Witness",
+            "summary": "Investigation linked Mondelēz to new deforestation in Liberia through opaque cocoa supply chains. Mondelēz did not respond to requests for comment."
+          }
+        ],
+        "ngos_score": "Ethical Consumer: zero points for climate action. Chocolate Scorecard: middling."
+      },
+      {
+        "id": "tony-s",
+        "name": "Tony's Chocolonely",
+        "deforestation_policy": "Tony's 5 Sourcing Principles",
+        "traceability_summary": "100% traceable to cooperative level, largely to individual farmers. 26,536 farms GPS-polygon mapped. Bean Tracker platform provides container-level traceability.",
+        "sourcing_regions": [
+          "Ghana",
+          "Côte d'Ivoire"
+        ],
+        "certifications": [
+          "Tony's Open Chain",
+          "B Corp"
+        ],
+        "incidents": [],
+        "ngos_score": "Chocolate Scorecard: ranked #1 for 5 consecutive years (91% in 2025)"
+      },
+      {
+        "id": "kellanova",
+        "name": "Kellanova (formerly Kellogg's)",
+        "deforestation_policy": "Kellanova Global Deforestation Policy (2020)",
+        "traceability_summary": "Traceable to refinery level. Mix of RSPO Segregated and Mass Balance. Previously relied on GreenPalm certificates (credits). Independent auditor Proforest engaged.",
+        "sourcing_regions": [
+          "Malaysia",
+          "Indonesia"
+        ],
+        "certifications": [
+          "RSPO (mixed)",
+          "NDPE signatory"
+        ],
+        "incidents": [
+          {
+            "year": 2016,
+            "source": "Amnesty International",
+            "summary": "Pringles in China confirmed to use palm oil from Wilmar plantations linked to labour abuses"
+          }
+        ],
+        "ngos_score": "Palm Oil Detectives: recommends boycott. Kellogg's scored better than many peers on NDPE commitment."
+      },
+      {
+        "id": "pladis",
+        "name": "pladis (Yıldız Holding)",
+        "deforestation_policy": "pladis No Deforestation Policy (2018)",
+        "traceability_summary": "Working toward mill-level traceability since 2018. Uses Starling satellite monitoring. Limited public disclosure.",
+        "sourcing_regions": [
+          "Southeast Asia"
+        ],
+        "certifications": [
+          "RSPO (level unspecified)",
+          "Earthworm Foundation member"
+        ],
+        "incidents": [],
+        "ngos_score": "Ethical Consumer: worst rating in biscuits category"
+      },
+      {
+        "id": "unilever",
+        "name": "Unilever",
+        "deforestation_policy": "Unilever People & Nature Policy",
+        "traceability_summary": "97% of key commodities independently verified deforestation-free (2024). Founding RSPO member. Satellite monitoring across 20M+ hectares. Missed original 2020 deadline.",
+        "sourcing_regions": [
+          "Malaysia",
+          "Indonesia",
+          "Brazil"
+        ],
+        "certifications": [
+          "RSPO founding member"
+        ],
+        "incidents": [
+          {
+            "year": 2020,
+            "source": "Rainforest Action Network",
+            "summary": "Criticised Unilever's palm oil suppliers for continued deforestation links"
+          }
+        ],
+        "ngos_score": "Industry leader in policy, but missed deforestation-free deadlines (2020 → 2023 → 97% by 2024)"
+      },
+      {
+        "id": "coca-cola",
+        "name": "The Coca-Cola Company",
+        "deforestation_policy": "World Without Waste strategy (packaging-focused, not ingredients)",
+        "traceability_summary": "Limited ingredient-level deforestation commitments. Focus is on packaging sustainability.",
+        "sourcing_regions": [
+          "Global"
+        ],
+        "certifications": [],
+        "incidents": [
+          {
+            "year": 2022,
+            "source": "ASA (UK Advertising Standards Authority)",
+            "summary": "Ruled that Innocent (Coca-Cola subsidiary) misled consumers about environmental impact of its products"
+          }
+        ],
+        "ngos_score": "Ranked world's worst plastic polluter multiple years. Ethical Consumer: below benchmark for Innocent."
+      },
+      {
+        "id": "monde-nissin",
+        "name": "Monde Nissin",
+        "deforestation_policy": "Quorn Sustainability Commitments",
+        "traceability_summary": "Quorn mycoprotein produced via UK fermentation. Palm oil (in other Quorn products) is RSPO Segregated. Soy is deforestation-free and organic.",
+        "sourcing_regions": [
+          "UK"
+        ],
+        "certifications": [
+          "RSPO Segregated (where palm used)",
+          "Carbon Trust certified"
+        ],
+        "incidents": [],
+        "ngos_score": "Which? rates Quorn's sourcing positively"
+      },
+      {
+        "id": "nestle",
+        "name": "Nestlé",
+        "deforestation_policy": "Nestlé Responsible Sourcing Standard + Nescafé Plan",
+        "traceability_summary": "96.1% of coffee traceable to first collection point. Satellite monitoring in sourcing regions. Mixed track record across commodities.",
+        "sourcing_regions": [
+          "Brazil",
+          "Vietnam",
+          "Colombia",
+          "Indonesia"
+        ],
+        "certifications": [
+          "Rainforest Alliance (partial)"
+        ],
+        "incidents": [
+          {
+            "year": 2025,
+            "source": "Global Witness",
+            "summary": "Linked to deforestation in Liberia through cocoa supply chain (alongside Mondelēz, Mars)"
+          }
+        ],
+        "ngos_score": "Mixed — strong policies on paper, repeated criticism over implementation"
+      },
+      {
+        "id": "ecotone",
+        "name": "Ecotone (formerly Wessanen)",
+        "deforestation_policy": "Ecotone sustainability commitments",
+        "traceability_summary": "Fairtrade certification provides cooperative-level traceability. Organic adds environmental requirements.",
+        "sourcing_regions": [
+          "India",
+          "East Africa"
+        ],
+        "certifications": [
+          "B Corp"
+        ],
+        "incidents": [],
+        "ngos_score": "Strong reputation — B Corp certified, focused exclusively on organic and natural food"
+      },
+      {
+        "id": "arla",
+        "name": "Arla Foods",
+        "deforestation_policy": "Arla Climate Check and Sustainability Commitments",
+        "traceability_summary": "Milk traceable to member farms. Feed-chain soy traceability is less transparent.",
+        "sourcing_regions": [
+          "Denmark",
+          "Sweden",
+          "UK"
+        ],
+        "certifications": [
+          "Red Tractor (UK)"
+        ],
+        "incidents": [],
+        "ngos_score": "European dairy industry broadly criticised for soy feed dependency"
+      },
+      {
+        "id": "warburtons",
+        "name": "Warburtons Ltd",
+        "deforestation_policy": "Warburtons Responsible Sourcing Policy",
+        "traceability_summary": "RSPO Mass Balance for palm oil. Limited public disclosure on soy sourcing. Family-owned, less sustainability reporting than public companies.",
+        "sourcing_regions": [
+          "UK",
+          "Southeast Asia"
+        ],
+        "certifications": [
+          "RSPO Mass Balance"
+        ],
+        "incidents": [],
+        "ngos_score": null
+      },
+      {
+        "id": "mars",
+        "name": "Mars Inc.",
+        "deforestation_policy": "Mars Cocoa for Generations + Responsible Palm Oil Policy",
+        "traceability_summary": "100% cocoa traceable to first purchase point. Rainforest Alliance certified. Palm oil 99%+ traceable to mill level. Cocoa & Forests Initiative signatory.",
+        "sourcing_regions": [
+          "West Africa",
+          "Southeast Asia"
+        ],
+        "certifications": [
+          "Rainforest Alliance",
+          "Cocoa & Forests Initiative"
+        ],
+        "incidents": [
+          {
+            "year": 2025,
+            "source": "Global Witness",
+            "summary": "Linked to deforestation in Liberia through cocoa supply chains"
+          }
+        ],
+        "ngos_score": "Chocolate Scorecard: middling — better than some, below Tony's and Ben & Jerry's"
+      },
+      {
+        "id": "two-farmers",
+        "name": "Two Farmers",
+        "deforestation_policy": null,
+        "traceability_summary": "Potatoes grown, harvested, stored, cooked and packed on their own Herefordshire farm. Uses sunflower oil — no palm oil. 100% compostable packaging.",
+        "sourcing_regions": [
+          "UK (Herefordshire)"
+        ],
+        "certifications": [],
+        "incidents": [],
+        "ngos_score": "Good Shopping Guide: top-rated ethical crisps brand"
+      },
+      {
+        "id": "island-bakery",
+        "name": "Island Bakery Organics",
+        "deforestation_policy": null,
+        "traceability_summary": "All ingredients organic and fully traceable. Palm oil free. Factory powered by hydro-electric turbine and wind turbine on the Isle of Mull. Ovens heated by local wood chip.",
+        "sourcing_regions": [
+          "UK (Isle of Mull, Scotland)"
+        ],
+        "certifications": [
+          "Soil Association Organic"
+        ],
+        "incidents": [],
+        "ngos_score": "Good Shopping Guide: top-rated ethical biscuits. Ethical Consumer: best buy."
+      },
+      {
+        "id": "bird-and-wild",
+        "name": "Bird & Wild Coffee",
+        "deforestation_policy": null,
+        "traceability_summary": "100% shade-grown coffee from agroforestry systems. Triple certified: Fairtrade, Organic, and Smithsonian Bird Friendly (the gold standard for biodiversity-friendly coffee). Coffee grows under native tree canopy, preserving forest habitat.",
+        "sourcing_regions": [
+          "Latin America"
+        ],
+        "certifications": [
+          "Fairtrade",
+          "Organic",
+          "Smithsonian Bird Friendly"
+        ],
+        "incidents": [],
+        "ngos_score": "Ethical Consumer: recommended. Only UK brand with Bird Friendly certification."
+      },
+      {
+        "id": "biona",
+        "name": "Biona (Windmill Organics)",
+        "deforestation_policy": null,
+        "traceability_summary": "Organic ingredients. Uses organic palm oil where used (RSPO certified). Chocolate spread range is palm oil free, using sunflower oil instead.",
+        "sourcing_regions": [
+          "Europe"
+        ],
+        "certifications": [
+          "Organic"
+        ],
+        "incidents": [],
+        "ngos_score": "Ethical Consumer: recommended for palm oil policy"
+      }
+    ],
+    "products": [
+      {
+        "id": "nutella-750g",
+        "name": "Nutella",
+        "brand": "Nutella",
+        "company_id": "ferrero",
+        "category": "Spreads",
+        "barcode": "3017620422003",
+        "image_url": "",
+        "commodities": [
+          {
+            "commodity_id": "palm-oil",
+            "is_primary": true,
+            "amount": "high"
+          },
+          {
+            "commodity_id": "cocoa",
+            "is_primary": false,
+            "amount": "low"
+          },
+          {
+            "commodity_id": "soy",
+            "is_primary": false,
+            "amount": "trace"
+          }
+        ],
+        "certifications": [
+          {
+            "name": "RSPO Segregated",
+            "scope": "Palm Oil",
+            "strength": "strong"
+          }
+        ],
+        "risk_score": 3,
+        "risk_factors": [
+          "Palm oil is a primary ingredient (~20%)",
+          "Sources from Malaysia and Indonesia"
+        ],
+        "mitigating_factors": [
+          "RSPO Segregated — strongest available palm oil certification",
+          "WWF ranked Ferrero #1 for sustainable palm oil",
+          "Traceable to mill level with independent monitoring"
+        ],
+        "alternatives": [
+          "biona-choc-spread"
+        ],
+        "sources": [
+          "https://www.nutella.com/int/en/inside-nutella/sustainability/palm-oil",
+          "https://www.sustainablepalmoilchoice.eu/participant/nutella-2/"
+        ]
+      },
+      {
+        "id": "cadbury-dairy-milk",
+        "name": "Cadbury Dairy Milk",
+        "brand": "Cadbury",
+        "company_id": "mondelez",
+        "category": "Chocolate",
+        "barcode": "7622210989482",
+        "image_url": "",
+        "commodities": [
+          {
+            "commodity_id": "cocoa",
+            "is_primary": true,
+            "amount": "high"
+          },
+          {
+            "commodity_id": "palm-oil",
+            "is_primary": false,
+            "amount": "low"
+          }
+        ],
+        "certifications": [
+          {
+            "name": "Cocoa Life",
+            "scope": "Cocoa",
+            "strength": "moderate"
+          }
+        ],
+        "risk_score": 6,
+        "risk_factors": [
+          "Cocoa is the primary ingredient from high-risk West Africa",
+          "2025 Global Witness linked Mondelēz to Liberia deforestation",
+          "Cocoa Life is in-house, not independent like Fairtrade",
+          "Mass balance purchasing allows mixing of certified and uncertified cocoa"
+        ],
+        "mitigating_factors": [
+          "100% Dairy Milk cocoa from Cocoa Life programme",
+          "$1bn investment committed through 2030",
+          "Farm-level GPS mapping in major sourcing regions"
+        ],
+        "alternatives": [
+          "tony-chocolonely-milk",
+          "green-blacks-dark-85",
+          "galaxy-smooth-milk"
+        ],
+        "sources": [
+          "https://www.cadbury.co.uk/about/impact/cocoa-life/",
+          "https://globalwitness.org/en/campaigns/forests/chocolate-giants-fuel-deforestation-in-west-africas-last-rainforest/"
+        ]
+      },
+      {
+        "id": "tony-chocolonely-milk",
+        "name": "Tony's Chocolonely Milk Chocolate",
+        "brand": "Tony's Chocolonely",
+        "company_id": "tony-s",
+        "category": "Chocolate",
+        "barcode": "8717677334681",
+        "image_url": "",
+        "commodities": [
+          {
+            "commodity_id": "cocoa",
+            "is_primary": true,
+            "amount": "high"
+          },
+          {
+            "commodity_id": "soy",
+            "is_primary": false,
+            "amount": "trace"
+          }
+        ],
+        "certifications": [
+          {
+            "name": "Tony's Open Chain",
+            "scope": "Cocoa",
+            "strength": "very strong"
+          },
+          {
+            "name": "B Corp",
+            "scope": "Company-wide",
+            "strength": "strong"
+          }
+        ],
+        "risk_score": 1,
+        "risk_factors": [
+          "Cocoa is inherently a deforestation-risk commodity"
+        ],
+        "mitigating_factors": [
+          "99.95% of supply chain verified deforestation-free",
+          "100% traceable to cooperatives with individual farmer GPS mapping",
+          "Chocolate Scorecard #1 for five consecutive years",
+          "Pays Living Income Reference Price — reduces pressure to expand into forest"
+        ],
+        "alternatives": [],
+        "sources": [
+          "https://www.causeartist.com/tonys-chocolonely-case-study/",
+          "https://www.iied.org/tonys-chocolonely-holistic-approach-sustainable-chocolate"
+        ]
+      },
+      {
+        "id": "pringles-original",
+        "name": "Pringles Original",
+        "brand": "Pringles",
+        "company_id": "kellanova",
+        "category": "Snacks",
+        "barcode": "5053990101573",
+        "image_url": "",
+        "commodities": [
+          {
+            "commodity_id": "palm-oil",
+            "is_primary": false,
+            "amount": "moderate"
+          }
+        ],
+        "certifications": [
+          {
+            "name": "RSPO (Segregated + Mass Balance mix)",
+            "scope": "Palm Oil",
+            "strength": "moderate"
+          }
+        ],
+        "risk_score": 5,
+        "risk_factors": [
+          "Palm oil in vegetable oil blend",
+          "Mixed certification — Mass Balance allows mixing certified/uncertified",
+          "Historical reliance on palm oil credits rather than physical certification",
+          "Amnesty International linked China operations to problematic plantations"
+        ],
+        "mitigating_factors": [
+          "Global Deforestation Policy covers palm oil, soy, paper, sugar",
+          "Independent auditor (Proforest) engaged",
+          "Palm oil is not the dominant ingredient"
+        ],
+        "alternatives": [
+          "two-farmers-lightly-salted"
+        ],
+        "sources": [
+          "https://www.edie.net/kelloggs-revamps-deforestation-and-palm-oil-policies-after-environmental-protests/",
+          "https://www.amnesty.org/en/latest/news/2016/11/key-facts-about-palm-oil/"
+        ]
+      },
+      {
+        "id": "mcvities-digestives",
+        "name": "McVitie's Digestives Original",
+        "brand": "McVitie's",
+        "company_id": "pladis",
+        "category": "Biscuits",
+        "barcode": "5000168001142",
+        "image_url": "",
+        "commodities": [
+          {
+            "commodity_id": "palm-oil",
+            "is_primary": true,
+            "amount": "high"
+          }
+        ],
+        "certifications": [
+          {
+            "name": "RSPO (level unspecified)",
+            "scope": "Palm Oil",
+            "strength": "moderate"
+          }
+        ],
+        "risk_score": 6,
+        "risk_factors": [
+          "Palm oil is the primary fat in the product",
+          "Certification level not clearly specified",
+          "Parent company rated worst by Ethical Consumer in biscuits",
+          "Limited public transparency compared to peers"
+        ],
+        "mitigating_factors": [
+          "Earthworm Foundation partnership since 2018",
+          "Starling satellite monitoring for deforestation detection",
+          "Formal No Deforestation policy"
+        ],
+        "alternatives": [
+          "island-bakery-shortbread"
+        ],
+        "sources": [
+          "https://earthworm.org/members/pladis",
+          "https://www.ethicalconsumer.org/food-drink/shopping-guide/biscuits"
+        ]
+      },
+      {
+        "id": "green-blacks-dark-85",
+        "name": "Green & Black's Organic Dark 85%",
+        "brand": "Green & Black's",
+        "company_id": "mondelez",
+        "category": "Chocolate",
+        "barcode": "7622210153777",
+        "image_url": "",
+        "commodities": [
+          {
+            "commodity_id": "cocoa",
+            "is_primary": true,
+            "amount": "high"
+          }
+        ],
+        "certifications": [
+          {
+            "name": "Fairtrade",
+            "scope": "Cocoa",
+            "strength": "strong"
+          },
+          {
+            "name": "Organic (EU/USDA)",
+            "scope": "All ingredients",
+            "strength": "strong"
+          },
+          {
+            "name": "FSC",
+            "scope": "Packaging",
+            "strength": "moderate"
+          }
+        ],
+        "risk_score": 4,
+        "risk_factors": [
+          "85% cocoa — entirely dependent on a deforestation-risk commodity",
+          "Parent company Mondelēz linked to deforestation (Global Witness 2025)",
+          "2019 Channel 4 found child labour and deforestation in supplying farms",
+          "Some G&B product lines have dropped Fairtrade"
+        ],
+        "mitigating_factors": [
+          "This specific product carries both Fairtrade and Organic certification",
+          "Fairtrade provides independent third-party verification",
+          "No palm oil in this product",
+          "Diverse sourcing regions"
+        ],
+        "alternatives": [
+          "tony-chocolonely-milk"
+        ],
+        "sources": [
+          "https://www.ocado.com/webshop/product/Green--Blacks-Organic-85-Dark/34818011",
+          "https://www.colorwithleo.com/what-happened-to-green-and-blacks/"
+        ]
+      },
+      {
+        "id": "pot-noodle-chicken",
+        "name": "Pot Noodle Chicken & Mushroom",
+        "brand": "Pot Noodle",
+        "company_id": "unilever",
+        "category": "Instant Noodles",
+        "barcode": "5000118203893",
+        "image_url": "",
+        "commodities": [
+          {
+            "commodity_id": "palm-oil",
+            "is_primary": true,
+            "amount": "high"
+          },
+          {
+            "commodity_id": "soy",
+            "is_primary": false,
+            "amount": "low"
+          }
+        ],
+        "certifications": [],
+        "risk_score": 5,
+        "risk_factors": [
+          "Palm oil used to fry noodles — integral to product",
+          "No product-specific certification on packaging",
+          "Gap between Unilever's corporate claims and product-level verification",
+          "Contains soy"
+        ],
+        "mitigating_factors": [
+          "Unilever has one of the most comprehensive deforestation policies in FMCG",
+          "97% of key commodities independently verified deforestation-free (corporate level)",
+          "Founding RSPO member with satellite monitoring"
+        ],
+        "alternatives": [],
+        "sources": [
+          "https://www.unilever.com/sustainability/nature/deforestation-free-supply-chain/our-deforestation-free-progress/"
+        ]
+      },
+      {
+        "id": "ben-jerrys-cookie-dough",
+        "name": "Ben & Jerry's Cookie Dough",
+        "brand": "Ben & Jerry's",
+        "company_id": "unilever",
+        "category": "Ice Cream",
+        "barcode": "8711327376625",
+        "image_url": "",
+        "commodities": [
+          {
+            "commodity_id": "cocoa",
+            "is_primary": false,
+            "amount": "low"
+          },
+          {
+            "commodity_id": "soy",
+            "is_primary": false,
+            "amount": "trace"
+          }
+        ],
+        "certifications": [
+          {
+            "name": "Fairtrade",
+            "scope": "Cocoa, Sugar, Vanilla",
+            "strength": "strong"
+          },
+          {
+            "name": "Tony's Open Chain",
+            "scope": "Cocoa",
+            "strength": "very strong"
+          },
+          {
+            "name": "B Corp",
+            "scope": "Company-wide",
+            "strength": "strong"
+          }
+        ],
+        "risk_score": 2,
+        "risk_factors": [
+          "Cocoa is a deforestation-risk commodity",
+          "Parent company Unilever criticised over palm oil suppliers"
+        ],
+        "mitigating_factors": [
+          "Cocoa via Tony's Open Chain — industry-leading traceability",
+          "Multiple Fairtrade ingredients",
+          "B Corp certified",
+          "No palm oil in this product"
+        ],
+        "alternatives": [],
+        "sources": [
+          "https://instituteofsustainabilitystudies.com/insights/sustainable-business-spotlights/business-spotlights-ben-and-jerrys/"
+        ]
+      },
+      {
+        "id": "innocent-strawberry-banana",
+        "name": "Innocent Strawberries & Bananas Smoothie",
+        "brand": "Innocent",
+        "company_id": "coca-cola",
+        "category": "Drinks",
+        "barcode": "5038862112109",
+        "image_url": "",
+        "commodities": [],
+        "certifications": [
+          {
+            "name": "B Corp",
+            "scope": "Company-wide",
+            "strength": "moderate"
+          }
+        ],
+        "risk_score": 2,
+        "risk_factors": [
+          "Parent company Coca-Cola has poor environmental record",
+          "ASA ruled environmental marketing claims were misleading"
+        ],
+        "mitigating_factors": [
+          "No high-risk deforestation commodities in this product",
+          "B Corp certified",
+          "Product is just crushed fruit"
+        ],
+        "alternatives": [],
+        "sources": [
+          "https://www.thegrocer.co.uk/news/innocent-misled-shoppers-over-environmental-impact-of-buying-its-drinks-ad-watchdog-rules/664784.article"
+        ]
+      },
+      {
+        "id": "quorn-mince",
+        "name": "Quorn Mince",
+        "brand": "Quorn",
+        "company_id": "monde-nissin",
+        "category": "Meat Alternatives",
+        "barcode": "5019503002515",
+        "image_url": "",
+        "commodities": [],
+        "certifications": [],
+        "risk_score": 1,
+        "risk_factors": [
+          "Parent company has a broader portfolio with less scrutiny"
+        ],
+        "mitigating_factors": [
+          "Zero deforestation-risk commodities",
+          "Mycoprotein produced via UK fermentation — minimal land use",
+          "Carbon Trust certified footprint"
+        ],
+        "alternatives": [],
+        "sources": [
+          "https://www.which.co.uk/reviews/shopping-sustainably/article/green-brands/green-brands-quorn-a3pJs8F8rGeG"
+        ]
+      },
+      {
+        "id": "nescafe-original",
+        "name": "Nescafé Original Instant Coffee",
+        "brand": "Nescafé",
+        "company_id": "nestle",
+        "category": "Coffee",
+        "barcode": "7613036602129",
+        "image_url": "",
+        "commodities": [
+          {
+            "commodity_id": "coffee",
+            "is_primary": true,
+            "amount": "high"
+          }
+        ],
+        "certifications": [
+          {
+            "name": "Rainforest Alliance (partial)",
+            "scope": "Coffee",
+            "strength": "moderate"
+          }
+        ],
+        "risk_score": 5,
+        "risk_factors": [
+          "Coffee is 100% of the product",
+          "Instant coffee typically uses sun-grown beans",
+          "Sourced from high-deforestation-risk countries",
+          "Rainforest Alliance not consistently applied to this product"
+        ],
+        "mitigating_factors": [
+          "96.1% of coffee volume traceable",
+          "Nescafé Plan invests in agroforestry",
+          "Satellite monitoring in sourcing regions"
+        ],
+        "alternatives": [
+          "bird-wild-coffee"
+        ],
+        "sources": [
+          "https://www.nestle.com/sustainability/nature-environment/responsible-sourcing"
+        ]
+      },
+      {
+        "id": "clipper-everyday-tea",
+        "name": "Clipper Everyday Tea",
+        "brand": "Clipper",
+        "company_id": "ecotone",
+        "category": "Tea",
+        "barcode": "5021991941481",
+        "image_url": "",
+        "commodities": [
+          {
+            "commodity_id": "tea",
+            "is_primary": true,
+            "amount": "high"
+          }
+        ],
+        "certifications": [
+          {
+            "name": "Fairtrade",
+            "scope": "Tea",
+            "strength": "strong"
+          },
+          {
+            "name": "Organic (Soil Association)",
+            "scope": "Tea",
+            "strength": "strong"
+          }
+        ],
+        "risk_score": 1,
+        "risk_factors": [
+          "Tea has some deforestation linkage, though weaker than other commodities"
+        ],
+        "mitigating_factors": [
+          "Dual Fairtrade and Organic certification",
+          "Tea is inherently lower-risk than palm oil or cocoa",
+          "Parent company Ecotone is B Corp certified"
+        ],
+        "alternatives": [],
+        "sources": [
+          "https://www.clipper-teas.com/about/our-sustainability/",
+          "https://www.clipper-teas.com/about/our-ethics/"
+        ]
+      },
+      {
+        "id": "lurpak-butter",
+        "name": "Lurpak Slightly Salted Butter",
+        "brand": "Lurpak",
+        "company_id": "arla",
+        "category": "Dairy",
+        "barcode": "5740900405110",
+        "image_url": "",
+        "commodities": [
+          {
+            "commodity_id": "dairy-feed",
+            "is_primary": true,
+            "amount": "high"
+          }
+        ],
+        "certifications": [
+          {
+            "name": "Red Tractor",
+            "scope": "Dairy",
+            "strength": "weak"
+          }
+        ],
+        "risk_score": 4,
+        "risk_factors": [
+          "Dairy cows fed imported soy from deforestation-risk regions",
+          "Indirect link is difficult to trace",
+          "Red Tractor doesn't address feed-chain deforestation"
+        ],
+        "mitigating_factors": [
+          "No direct deforestation-risk commodities in the product itself",
+          "Arla has formal sustainability commitments",
+          "The indirect link is shared by virtually all conventional dairy"
+        ],
+        "alternatives": [],
+        "sources": [
+          "https://www.arla.com/sustainability/"
+        ]
+      },
+      {
+        "id": "warburtons-toastie",
+        "name": "Warburtons Toastie White Bread",
+        "brand": "Warburtons",
+        "company_id": "warburtons",
+        "category": "Bread",
+        "barcode": "5010044001296",
+        "image_url": "",
+        "commodities": [
+          {
+            "commodity_id": "palm-oil",
+            "is_primary": false,
+            "amount": "low"
+          },
+          {
+            "commodity_id": "soy",
+            "is_primary": false,
+            "amount": "low"
+          }
+        ],
+        "certifications": [
+          {
+            "name": "RSPO Mass Balance",
+            "scope": "Palm Oil",
+            "strength": "moderate"
+          }
+        ],
+        "risk_score": 3,
+        "risk_factors": [
+          "Contains both palm oil and soy",
+          "Mass Balance certification (weaker traceability)",
+          "Limited public disclosure on soy sourcing"
+        ],
+        "mitigating_factors": [
+          "Both commodities are minor ingredients",
+          "Primary ingredient (wheat) is UK-sourced",
+          "RSPO membership"
+        ],
+        "alternatives": [],
+        "sources": [
+          "https://www.warburtons.co.uk/corporate/our-responsibilities/"
+        ]
+      },
+      {
+        "id": "galaxy-smooth-milk",
+        "name": "Galaxy Smooth Milk Chocolate",
+        "brand": "Galaxy",
+        "company_id": "mars",
+        "category": "Chocolate",
+        "barcode": "5000159459228",
+        "image_url": "",
+        "commodities": [
+          {
+            "commodity_id": "cocoa",
+            "is_primary": true,
+            "amount": "high"
+          },
+          {
+            "commodity_id": "palm-oil",
+            "is_primary": false,
+            "amount": "low"
+          },
+          {
+            "commodity_id": "soy",
+            "is_primary": false,
+            "amount": "trace"
+          }
+        ],
+        "certifications": [
+          {
+            "name": "Rainforest Alliance",
+            "scope": "Cocoa",
+            "strength": "moderate"
+          }
+        ],
+        "risk_score": 5,
+        "risk_factors": [
+          "Cocoa and palm oil both present",
+          "2025 Global Witness linked Mars to Liberia deforestation",
+          "Rainforest Alliance has been criticised for not fully preventing deforestation"
+        ],
+        "mitigating_factors": [
+          "100% Rainforest Alliance certified cocoa",
+          "Cocoa & Forests Initiative signatory",
+          "Palm oil nearly fully traceable to mill level"
+        ],
+        "alternatives": [
+          "tony-chocolonely-milk",
+          "cadbury-dairy-milk",
+          "green-blacks-dark-85"
+        ],
+        "sources": [
+          "https://www.mars.com/sustainability-plan/cocoa-for-generations",
+          "https://globalwitness.org/en/campaigns/forests/chocolate-giants-fuel-deforestation-in-west-africas-last-rainforest/"
+        ]
+      },
+      {
+        "id": "two-farmers-lightly-salted",
+        "name": "Two Farmers Lightly Salted Crisps",
+        "brand": "Two Farmers",
+        "company_id": "two-farmers",
+        "category": "Snacks",
+        "barcode": "",
+        "image_url": "",
+        "commodities": [],
+        "certifications": [],
+        "risk_score": 1,
+        "risk_factors": [
+          "Small-scale production — limited independent scrutiny compared to major brands"
+        ],
+        "mitigating_factors": [
+          "Zero deforestation-risk commodities — potatoes and sunflower oil only",
+          "Entirely UK-grown and produced on their own farm",
+          "100% compostable packaging",
+          "Powered by renewable energy"
+        ],
+        "alternatives": [],
+        "sources": [
+          "https://twofarmers.co.uk/",
+          "https://thegoodshoppingguide.com/ethical-crisps/"
+        ]
+      },
+      {
+        "id": "island-bakery-shortbread",
+        "name": "Island Bakery Organic Shortbread",
+        "brand": "Island Bakery",
+        "company_id": "island-bakery",
+        "category": "Biscuits",
+        "barcode": "",
+        "image_url": "",
+        "commodities": [],
+        "certifications": [
+          {
+            "name": "Soil Association Organic",
+            "scope": "All ingredients",
+            "strength": "strong"
+          }
+        ],
+        "risk_score": 1,
+        "risk_factors": [
+          "Small brand — less public scrutiny and reporting than major manufacturers"
+        ],
+        "mitigating_factors": [
+          "Zero deforestation-risk commodities — no palm oil, no soy, no cocoa",
+          "Fully organic and traceable ingredients",
+          "Factory powered by hydro and wind on the Isle of Mull",
+          "Palm oil free",
+          "Top-rated by Good Shopping Guide and Ethical Consumer"
+        ],
+        "alternatives": [],
+        "sources": [
+          "https://www.islandbakery.scot/organic-and-sustainable/",
+          "https://thegoodshoppingguide.com/brand-directory/island-bakery/"
+        ]
+      },
+      {
+        "id": "bird-wild-coffee",
+        "name": "Bird & Wild Shade Roast Coffee",
+        "brand": "Bird & Wild",
+        "company_id": "bird-and-wild",
+        "category": "Coffee",
+        "barcode": "",
+        "image_url": "",
+        "commodities": [
+          {
+            "commodity_id": "coffee",
+            "is_primary": true,
+            "amount": "high"
+          }
+        ],
+        "certifications": [
+          {
+            "name": "Fairtrade",
+            "scope": "Coffee",
+            "strength": "strong"
+          },
+          {
+            "name": "Organic",
+            "scope": "Coffee",
+            "strength": "strong"
+          },
+          {
+            "name": "Smithsonian Bird Friendly",
+            "scope": "Coffee",
+            "strength": "very strong"
+          }
+        ],
+        "risk_score": 1,
+        "risk_factors": [
+          "Coffee is inherently a deforestation-risk commodity"
+        ],
+        "mitigating_factors": [
+          "100% shade-grown under native tree canopy — actively preserves forest",
+          "Triple certified: Fairtrade, Organic, and Bird Friendly",
+          "Bird Friendly is the gold standard for biodiversity in coffee — requires 100% organic shade-grown",
+          "Agroforestry model means coffee production protects rather than destroys forest"
+        ],
+        "alternatives": [],
+        "sources": [
+          "https://www.ethicalconsumer.org/food-drink/shopping-guide/ethical-coffee-coffee-beans",
+          "https://www.uecoffeeroasters.com/blogs/careers/sustainable-coffee-brands"
+        ]
+      },
+      {
+        "id": "biona-choc-spread",
+        "name": "Biona Organic Dark Chocolate Spread",
+        "brand": "Biona",
+        "company_id": "biona",
+        "category": "Spreads",
+        "barcode": "",
+        "image_url": "",
+        "commodities": [
+          {
+            "commodity_id": "cocoa",
+            "is_primary": true,
+            "amount": "moderate"
+          }
+        ],
+        "certifications": [
+          {
+            "name": "Organic",
+            "scope": "All ingredients",
+            "strength": "strong"
+          }
+        ],
+        "risk_score": 2,
+        "risk_factors": [
+          "Contains cocoa — a deforestation-risk commodity",
+          "Small brand with less public supply chain disclosure than major manufacturers"
+        ],
+        "mitigating_factors": [
+          "Palm oil free — uses sunflower oil instead",
+          "Organic certified",
+          "Recommended by Ethical Consumer for palm oil policy",
+          "Cocoa amount is moderate, not dominant"
+        ],
+        "alternatives": [],
+        "sources": [
+          "https://www.ethicalconsumer.org/palm-oil/palm-oil-free-list"
+        ]
+      }
+    ]
+  }
