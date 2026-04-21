@@ -16,6 +16,20 @@ yarn dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Environment variables
+
+AI-backed deforestation reports use the Anthropic API when a key is present.
+
+1. Copy the example file:
+
+   ```bash
+   cp .env.example .env.local
+   ```
+
+2. Set `ANTHROPIC_API_KEY` in `.env.local` (see [Anthropic console](https://console.anthropic.com/)).
+
+If the key is missing or empty, `POST /api/report` still works and returns the **rule-based fallback** report. In production (for example on Vercel), configure the same variable in the project’s environment settings instead of committing secrets.
+
 ## Tests
 
 Unit tests use [Vitest](https://vitest.dev/). After `yarn install`, run:
