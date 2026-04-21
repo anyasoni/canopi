@@ -376,7 +376,7 @@
             "companyId": "ferrero",
             "category": "Spreads",
             "barcode": "3017620422003",
-            "imageUrl": "",
+            "imageUrl": "https://images.openfoodfacts.org/images/products/301/762/042/2003/front_en.820.400.jpg",
             "commodities": [
                 {
                     "commodityId": "palm-oil",
@@ -426,7 +426,7 @@
             "companyId": "mondelez",
             "category": "Chocolate",
             "barcode": "7622210989482",
-            "imageUrl": "",
+            "imageUrl": "https://images.openfoodfacts.org/images/products/762/230/084/5759/front_en.33.400.jpg",
             "commodities": [
                 {
                     "commodityId": "cocoa",
@@ -475,7 +475,7 @@
             "companyId": "tony-s",
             "category": "Chocolate",
             "barcode": "8717677334681",
-            "imageUrl": "",
+            "imageUrl": "https://images.openfoodfacts.org/images/products/871/767/733/9914/front_en.4.400.jpg",
             "commodities": [
                 {
                     "commodityId": "cocoa",
@@ -523,7 +523,7 @@
             "companyId": "kellanova",
             "category": "Snacks",
             "barcode": "5053990101573",
-            "imageUrl": "",
+            "imageUrl": "https://images.openfoodfacts.org/images/products/505/399/010/1573/front_en.44.400.jpg",
             "commodities": [
                 {
                     "commodityId": "palm-oil",
@@ -565,7 +565,7 @@
             "companyId": "pladis",
             "category": "Biscuits",
             "barcode": "5000168001142",
-            "imageUrl": "",
+            "imageUrl": "https://images.openfoodfacts.org/images/products/500/016/800/1142/front_en.15.400.jpg",
             "commodities": [
                 {
                     "commodityId": "palm-oil",
@@ -607,7 +607,7 @@
             "companyId": "mondelez",
             "category": "Chocolate",
             "barcode": "7622210153777",
-            "imageUrl": "",
+            "imageUrl": "https://images.openfoodfacts.org/images/products/762/221/058/4724/front_en.95.400.jpg",
             "commodities": [
                 {
                     "commodityId": "cocoa",
@@ -660,7 +660,7 @@
             "companyId": "unilever",
             "category": "Instant Noodles",
             "barcode": "5000118203893",
-            "imageUrl": "",
+            "imageUrl": "https://images.openfoodfacts.org/images/products/500/011/820/3503/front_en.94.400.jpg",
             "commodities": [
                 {
                     "commodityId": "palm-oil",
@@ -698,7 +698,7 @@
             "companyId": "unilever",
             "category": "Ice Cream",
             "barcode": "8711327376625",
-            "imageUrl": "",
+            "imageUrl": "https://images.openfoodfacts.org/images/products/871/132/737/3105/front_en.236.400.jpg",
             "commodities": [
                 {
                     "commodityId": "cocoa",
@@ -751,7 +751,7 @@
             "companyId": "coca-cola",
             "category": "Drinks",
             "barcode": "5038862112109",
-            "imageUrl": "",
+            "imageUrl": "https://images.openfoodfacts.org/images/products/503/886/232/0108/front_en.34.400.jpg",
             "commodities": [],
             "certifications": [
                 {
@@ -782,7 +782,7 @@
             "companyId": "monde-nissin",
             "category": "Meat Alternatives",
             "barcode": "5019503002515",
-            "imageUrl": "",
+            "imageUrl": "https://images.openfoodfacts.org/images/products/501/950/300/2157/front_en.62.400.jpg",
             "commodities": [],
             "certifications": [],
             "riskScore": 1,
@@ -806,7 +806,7 @@
             "companyId": "nestle",
             "category": "Coffee",
             "barcode": "7613036602129",
-            "imageUrl": "",
+            "imageUrl": "https://images.openfoodfacts.org/images/products/400/550/000/5827/front_en.45.400.jpg",
             "commodities": [
                 {
                     "commodityId": "coffee",
@@ -847,7 +847,7 @@
             "companyId": "ecotone",
             "category": "Tea",
             "barcode": "5021991941481",
-            "imageUrl": "",
+            "imageUrl": "https://images.openfoodfacts.org/images/products/502/199/194/3942/front_en.16.400.jpg",
             "commodities": [
                 {
                     "commodityId": "tea",
@@ -889,7 +889,7 @@
             "companyId": "arla",
             "category": "Dairy",
             "barcode": "5740900405110",
-            "imageUrl": "",
+            "imageUrl": "https://images.openfoodfacts.org/images/products/574/090/040/4502/front_en.3.400.jpg",
             "commodities": [
                 {
                     "commodityId": "dairy-feed",
@@ -927,7 +927,7 @@
             "companyId": "warburtons",
             "category": "Bread",
             "barcode": "5010044001296",
-            "imageUrl": "",
+            "imageUrl": "https://images.openfoodfacts.org/images/products/501/004/400/0275/front_en.53.400.jpg",
             "commodities": [
                 {
                     "commodityId": "palm-oil",
@@ -970,7 +970,7 @@
             "companyId": "mars",
             "category": "Chocolate",
             "barcode": "5000159459228",
-            "imageUrl": "",
+            "imageUrl": "https://images.openfoodfacts.org/images/products/500/015/955/2998/front_en.3.400.jpg",
             "commodities": [
                 {
                     "commodityId": "cocoa",
@@ -1023,7 +1023,7 @@
             "companyId": "two-farmers",
             "category": "Snacks",
             "barcode": "",
-            "imageUrl": "",
+            "imageUrl": "https://images.openfoodfacts.org/images/products/506/062/610/0008/front_en.3.400.jpg",
             "commodities": [],
             "certifications": [],
             "riskScore": 1,
@@ -1049,7 +1049,7 @@
             "companyId": "island-bakery",
             "category": "Biscuits",
             "barcode": "",
-            "imageUrl": "",
+            "imageUrl": "https://images.openfoodfacts.org/images/products/506/002/707/0023/front_fr.9.400.jpg",
             "commodities": [],
             "certifications": [
                 {
@@ -1082,7 +1082,7 @@
             "companyId": "bird-and-wild",
             "category": "Coffee",
             "barcode": "",
-            "imageUrl": "",
+            "imageUrl": "https://birdandwild.co.uk/cdn/shop/products/medium-roast-blend-1kg-whole-beans-436940.jpg?v=1709812369&width=800",
             "commodities": [
                 {
                     "commodityId": "coffee",
@@ -1130,7 +1130,7 @@
             "companyId": "biona",
             "category": "Spreads",
             "barcode": "",
-            "imageUrl": "",
+            "imageUrl": "https://images.openfoodfacts.org/images/products/503/272/230/6530/front_fr.7.400.jpg",
             "commodities": [
                 {
                     "commodityId": "cocoa",
