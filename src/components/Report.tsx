@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import type { DeforestationReport } from "@/lib/report-types";
 import { DeforestationReportSchema } from "@/lib/schemas/deforestation-report";
+import type { ProductSource } from "@/lib/schemas/dataset";
 import { LoadingReport } from "./LoadingReport";
 import {
   Tag,
@@ -32,9 +33,22 @@ type ReportState =
 
 type ReportProps = {
   productId: string;
+  sources: ProductSource[];
 };
 
 const REPORT_ERROR_MESSAGE = "Failed to generate report. Please try again.";
+
+// Keep the loading state on screen long enough for the rotating status messages
+// in <LoadingReport /> to cycle through at least once, even when the API
+// responds instantly (e.g. deterministic fallback, cached fetch).
+const MIN_LOADING_DURATION_MS = 4000;
+
+// /api/report is designed to always return a report (AI or deterministic
+// fallback). A failure here means the route itself was unreachable, so we
+// retry a couple of times to ride out transient network / dev-server blips
+// before surfacing the error UI.
+const REPORT_FETCH_MAX_ATTEMPTS = 3;
+const REPORT_FETCH_RETRY_BASE_MS = 500;
 
 const parseReportResponse = (json: unknown): DeforestationReport | undefined => {
   const result = DeforestationReportSchema.safeParse(json);
@@ -44,7 +58,64 @@ const parseReportResponse = (json: unknown): DeforestationReport | undefined => 
   return result.data;
 };
 
-export const Report = ({ productId }: ReportProps) => {
+const delay = (ms: number): Promise<void> =>
+  new Promise((resolve) => {
+    window.setTimeout(resolve, ms);
+  });
+
+const waitForMinimumDuration = async <T,>(
+  work: Promise<T>,
+  minMs: number,
+): Promise<T> => {
+  const started = Date.now();
+  const result = await work;
+  const remaining = minMs - (Date.now() - started);
+  if (remaining > 0) {
+    await delay(remaining);
+  }
+  return result;
+};
+
+const requestReportOnce = async (productId: string): Promise<DeforestationReport> => {
+  const response = await fetch("/api/report", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ productId }),
+  });
+  if (!response.ok) {
+    throw new Error(`Report request failed with status ${response.status}`);
+  }
+  const parsed = parseReportResponse((await response.json()) as unknown);
+  if (!parsed) {
+    throw new Error("Report response shape was invalid");
+  }
+  return parsed;
+};
+
+const requestReportWithRetries = async (
+  productId: string,
+): Promise<DeforestationReport> => {
+  let lastError: unknown;
+  for (let attempt = 1; attempt <= REPORT_FETCH_MAX_ATTEMPTS; attempt += 1) {
+    try {
+      return await requestReportOnce(productId);
+    } catch (error) {
+      lastError = error;
+      console.warn(
+        `[Report] ${productId}: attempt ${attempt}/${REPORT_FETCH_MAX_ATTEMPTS} failed`,
+        error,
+      );
+      if (attempt < REPORT_FETCH_MAX_ATTEMPTS) {
+        await delay(REPORT_FETCH_RETRY_BASE_MS * attempt);
+      }
+    }
+  }
+  throw lastError instanceof Error
+    ? lastError
+    : new Error("Report request failed after retries");
+};
+
+export const Report = ({ productId, sources }: ReportProps) => {
   const [reportState, setReportState] = useState<ReportState>({
     state: ReportRequestState.Loading,
   });
@@ -53,28 +124,22 @@ export const Report = ({ productId }: ReportProps) => {
     if (options?.showLoadingState ?? true) {
       setReportState({ state: ReportRequestState.Loading });
     }
+    console.info(`[Report] ${productId}: requesting report from /api/report`);
+    const startedAt = Date.now();
     try {
-      const response = await fetch("/api/report", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ productId }),
-      });
-      if (!response.ok) {
-        throw new Error(`Report request failed with status ${response.status}`);
-      }
-      const json = (await response.json()) as unknown;
-      const parsedReport = parseReportResponse(json);
-      if (!parsedReport) {
-        throw new Error("Report response shape was invalid");
-      }
+      const parsedReport = await waitForMinimumDuration(
+        requestReportWithRetries(productId),
+        MIN_LOADING_DURATION_MS,
+      );
+      console.info(
+        `[Report] ${productId}: report ready in ${Date.now() - startedAt}ms (incl. min loading delay)`,
+      );
       setReportState({
         state: ReportRequestState.Success,
         report: parsedReport,
       });
     } catch (error) {
-      console.error("Failed to fetch report", error);
+      console.error(`[Report] ${productId}: failed to fetch report`, error);
       setReportState({
         state: ReportRequestState.Error,
         message: REPORT_ERROR_MESSAGE,
@@ -176,6 +241,27 @@ export const Report = ({ productId }: ReportProps) => {
             ))}
           </div>
         </article>
+      ) : null}
+
+      {sources.length > 0 ? (
+        <section className="product-page__sources" aria-label="Product information sources">
+          <h2 className="product-page__sources-title">Sources</h2>
+          <ul className="product-page__sources-list">
+            {sources.map((source) => (
+              <li key={source.url} className="product-page__sources-item">
+                <a
+                  href={source.url}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="product-page__source-link"
+                >
+                  {source.label.trim().length > 0 ? source.label : source.url}
+                </a>
+                <p className="product-page__source-url">{source.url}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
       ) : null}
     </section>
   );

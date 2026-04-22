@@ -32,27 +32,7 @@ const ProductPage = async ({ params }: ProductPageProps) => {
         </p>
       </header>
       <hr className="product-page__divider" />
-      <Report productId={product.id} />
-      {product.sources.length > 0 ? (
-        <section className="product-page__sources" aria-label="Product information sources">
-          <h2 className="product-page__sources-title">Sources</h2>
-          <ul className="product-page__sources-list">
-            {product.sources.map((source) => (
-              <li key={source.url} className="product-page__sources-item">
-                <a
-                  href={source.url}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="product-page__source-link"
-                >
-                  {source.label.trim().length > 0 ? source.label : source.url}
-                </a>
-                <p className="product-page__source-url">{source.url}</p>
-              </li>
-            ))}
-          </ul>
-        </section>
-      ) : null}
+      <Report productId={product.id} sources={product.sources} />
     </main>
   );
 };
