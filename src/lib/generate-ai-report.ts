@@ -7,10 +7,10 @@ import { reportRiskTierFromScore } from "./risk-tier";
 import { parseDeforestationReport } from "./validate-report";
 
 const DEFAULT_MODEL = "claude-sonnet-4-6";
-const AI_MAX_ATTEMPTS = 3;
-const AI_REQUEST_TIMEOUT_MS = 30000;
-const AI_RETRY_BASE_MS = 400;
-const AI_MAX_TOKENS = 2048;
+const DEFAULT_AI_MAX_ATTEMPTS = 2;
+const DEFAULT_AI_REQUEST_TIMEOUT_MS = 12000;
+const DEFAULT_AI_RETRY_BASE_MS = 400;
+const DEFAULT_AI_MAX_TOKENS = 1024;
 const REPORT_TOOL_NAME = "emit_deforestation_report";
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
@@ -23,6 +23,55 @@ const resolveModelId = (): string => {
   }
   return DEFAULT_MODEL;
 };
+
+const resolvePositiveIntegerEnv = ({
+  name,
+  fallback,
+  min,
+  max,
+}: Readonly<{ name: string; fallback: number; min: number; max: number }>): number => {
+  const raw = process.env[name]?.trim();
+  if (!raw) {
+    return fallback;
+  }
+
+  if (!/^\d+$/.test(raw)) {
+    console.warn(`[generateAIReport] ignoring ${name}=${raw}; expected integer in [${min}, ${max}]`);
+    return fallback;
+  }
+
+  const parsed = Number(raw);
+  if (!Number.isSafeInteger(parsed) || parsed < min || parsed > max) {
+    console.warn(`[generateAIReport] ignoring ${name}=${raw}; expected integer in [${min}, ${max}]`);
+    return fallback;
+  }
+  return parsed;
+};
+
+const AI_MAX_ATTEMPTS = resolvePositiveIntegerEnv({
+  name: "ANTHROPIC_MAX_ATTEMPTS",
+  fallback: DEFAULT_AI_MAX_ATTEMPTS,
+  min: 1,
+  max: 5,
+});
+const AI_REQUEST_TIMEOUT_MS = resolvePositiveIntegerEnv({
+  name: "ANTHROPIC_TIMEOUT_MS",
+  fallback: DEFAULT_AI_REQUEST_TIMEOUT_MS,
+  min: 1000,
+  max: 60000,
+});
+const AI_RETRY_BASE_MS = resolvePositiveIntegerEnv({
+  name: "ANTHROPIC_RETRY_BASE_MS",
+  fallback: DEFAULT_AI_RETRY_BASE_MS,
+  min: 0,
+  max: 5000,
+});
+const AI_MAX_TOKENS = resolvePositiveIntegerEnv({
+  name: "ANTHROPIC_MAX_TOKENS",
+  fallback: DEFAULT_AI_MAX_TOKENS,
+  min: 256,
+  max: 4096,
+});
 
 const isToolInputSchema = (value: unknown): value is Anthropic.Tool.InputSchema => {
   if (!isRecord(value)) {
