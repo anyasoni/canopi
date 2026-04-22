@@ -1,11 +1,15 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import Link from "next/link";
+import { AlertTriangle, CheckCircle2, ShieldCheck } from "lucide-react";
 import type { DeforestationReport } from "@/lib/report-types";
 import { DeforestationReportSchema } from "@/lib/schemas/deforestation-report";
 import type { ProductSource } from "@/lib/schemas/dataset";
+import { commodityIconForId } from "@/lib/commodity-icon";
+import { AlternativeCard } from "./AlternativeCard";
 import { LoadingReport } from "./LoadingReport";
+import { ReportSection } from "./ReportSection";
+import { RiskBadge } from "./RiskBadge";
 import {
   Tag,
   tagVariantForCertificationStrength,
@@ -38,17 +42,11 @@ type ReportProps = {
 
 const REPORT_ERROR_MESSAGE = "Failed to generate report. Please try again.";
 
-// Keep the loading state on screen long enough for the rotating status messages
-// in <LoadingReport /> to cycle through at least once, even when the API
-// responds instantly (e.g. deterministic fallback, cached fetch).
 const MIN_LOADING_DURATION_MS = 4000;
-
-// /api/report is designed to always return a report (AI or deterministic
-// fallback). A failure here means the route itself was unreachable, so we
-// retry a couple of times to ride out transient network / dev-server blips
-// before surfacing the error UI.
 const REPORT_FETCH_MAX_ATTEMPTS = 3;
 const REPORT_FETCH_RETRY_BASE_MS = 500;
+
+const clientReportCache = new Map<string, DeforestationReport>();
 
 const parseReportResponse = (json: unknown): DeforestationReport | undefined => {
   const result = DeforestationReportSchema.safeParse(json);
@@ -115,10 +113,18 @@ const requestReportWithRetries = async (
     : new Error("Report request failed after retries");
 };
 
+const initialReportState = (productId: string): ReportState => {
+  const cached = clientReportCache.get(productId);
+  if (cached) {
+    return { state: ReportRequestState.Success, report: cached };
+  }
+  return { state: ReportRequestState.Loading };
+};
+
 export const Report = ({ productId, sources }: ReportProps) => {
-  const [reportState, setReportState] = useState<ReportState>({
-    state: ReportRequestState.Loading,
-  });
+  const [reportState, setReportState] = useState<ReportState>(() =>
+    initialReportState(productId),
+  );
 
   const fetchReport = useCallback(async (options?: { showLoadingState?: boolean }) => {
     if (options?.showLoadingState ?? true) {
@@ -134,6 +140,7 @@ export const Report = ({ productId, sources }: ReportProps) => {
       console.info(
         `[Report] ${productId}: report ready in ${Date.now() - startedAt}ms (incl. min loading delay)`,
       );
+      clientReportCache.set(productId, parsedReport);
       setReportState({
         state: ReportRequestState.Success,
         report: parsedReport,
@@ -148,9 +155,12 @@ export const Report = ({ productId, sources }: ReportProps) => {
   }, [productId]);
 
   useEffect(() => {
+    if (clientReportCache.has(productId)) {
+      return;
+    }
     // eslint-disable-next-line react-hooks/set-state-in-effect -- initial data request happens once on mount
     void fetchReport({ showLoadingState: false });
-  }, [fetchReport]);
+  }, [fetchReport, productId]);
 
   if (reportState.state === ReportRequestState.Loading) {
     return <LoadingReport />;
@@ -167,20 +177,31 @@ export const Report = ({ productId, sources }: ReportProps) => {
     );
   }
 
-  return (
-    <section className="report-preview">
-      <article className="report-preview__section">
-        <h2 className="report-preview__title">Verdict</h2>
-        <p className="report-preview__summary">{reportState.report.verdict.summary}</p>
-      </article>
+  const { report } = reportState;
+  const hasIncidents = report.company.incidents.length > 0;
 
-      {reportState.report.commodities.length > 0 ? (
-        <article className="report-preview__section">
-          <h2 className="report-preview__title">What&apos;s in it</h2>
+  return (
+    <section className="report-preview report-preview--loaded">
+      <ReportSection title="Verdict">
+        <div className="report-preview__verdict">
+          <RiskBadge score={report.verdict.score} size="lg" />
+          <p className="report-preview__summary">{report.verdict.summary}</p>
+        </div>
+      </ReportSection>
+
+      {report.commodities.length > 0 ? (
+        <ReportSection title="What's in it">
           <div className="report-preview__list">
-            {reportState.report.commodities.map((commodity) => (
+            {report.commodities.map((commodity) => (
               <div key={commodity.id} className="report-preview__list-item">
                 <div className="report-preview__item-heading">
+                  <span
+                    className="report-preview__item-icon"
+                    role="img"
+                    aria-label={`${commodity.name} icon`}
+                  >
+                    {commodityIconForId(commodity.id)}
+                  </span>
                   <p className="report-preview__item-title">{commodity.name}</p>
                   <Tag
                     variant={tagVariantForCommodityAmount(commodity.amount)}
@@ -191,16 +212,21 @@ export const Report = ({ productId, sources }: ReportProps) => {
               </div>
             ))}
           </div>
-        </article>
+        </ReportSection>
       ) : null}
 
-      {reportState.report.certifications.length > 0 ? (
-        <article className="report-preview__section">
-          <h2 className="report-preview__title">Certifications</h2>
+      {report.certifications.length > 0 ? (
+        <ReportSection title="Certifications">
           <div className="report-preview__list">
-            {reportState.report.certifications.map((certification) => (
+            {report.certifications.map((certification) => (
               <div key={certification.name} className="report-preview__list-item">
                 <div className="report-preview__item-heading">
+                  <ShieldCheck
+                    className="report-preview__item-icon report-preview__item-icon--positive"
+                    size={18}
+                    strokeWidth={2.2}
+                    aria-hidden
+                  />
                   <p className="report-preview__item-title">{certification.name}</p>
                   <Tag
                     variant={tagVariantForCertificationStrength(certification.strength)}
@@ -211,57 +237,81 @@ export const Report = ({ productId, sources }: ReportProps) => {
               </div>
             ))}
           </div>
-        </article>
+        </ReportSection>
       ) : null}
 
-      <article className="report-preview__section">
-        <h2 className="report-preview__title">The company</h2>
-        <p className="report-preview__item-title">{reportState.report.company.name}</p>
-        <p className="report-preview__item-body">{reportState.report.company.summary}</p>
-      </article>
-
-      <article className="report-preview__section">
-        <h2 className="report-preview__title">Bottom line</h2>
-        <p className="report-preview__summary">{reportState.report.bottomLine}</p>
-      </article>
-
-      {reportState.report.alternatives.length > 0 ? (
-        <article className="report-preview__section">
-          <h2 className="report-preview__title">Alternatives</h2>
-          <div className="report-preview__alternatives">
-            {reportState.report.alternatives.map((alternative) => (
-              <Link
-                key={alternative.id}
-                href={`/product/${alternative.id}`}
-                className="report-preview__alternative-card"
+      <ReportSection title="The company">
+        <p className="report-preview__item-title">{report.company.name}</p>
+        <p className="report-preview__item-body">{report.company.summary}</p>
+        {hasIncidents ? (
+          <ul className="report-preview__incidents">
+            {report.company.incidents.map((incident) => (
+              <li
+                key={`${incident.year}-${incident.source}-${incident.summary.slice(0, 16)}`}
+                className="callout callout--warning"
               >
-                <p className="report-preview__item-title">{alternative.name}</p>
-                <p className="report-preview__item-body">{alternative.reason}</p>
-              </Link>
+                <AlertTriangle
+                  className="callout__icon"
+                  size={18}
+                  strokeWidth={2.2}
+                  aria-hidden
+                />
+                <div className="callout__body">
+                  <p className="callout__meta">
+                    {incident.year} · {incident.source}
+                  </p>
+                  <p className="callout__text">{incident.summary}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <div className="callout callout--positive">
+            <CheckCircle2
+              className="callout__icon"
+              size={18}
+              strokeWidth={2.2}
+              aria-hidden
+            />
+            <p className="callout__text">No documented deforestation incidents found.</p>
+          </div>
+        )}
+      </ReportSection>
+
+      <ReportSection title="Bottom line">
+        <div className="callout callout--bottom-line">
+          <p className="callout__text">{report.bottomLine}</p>
+        </div>
+      </ReportSection>
+
+      {report.alternatives.length > 0 ? (
+        <ReportSection title="Alternatives">
+          <div className="report-preview__alternatives">
+            {report.alternatives.map((alternative) => (
+              <AlternativeCard key={alternative.id} alternative={alternative} />
             ))}
           </div>
-        </article>
+        </ReportSection>
       ) : null}
 
       {sources.length > 0 ? (
-        <section className="product-page__sources" aria-label="Product information sources">
-          <h2 className="product-page__sources-title">Sources</h2>
-          <ul className="product-page__sources-list">
+        <ReportSection title="Sources">
+          <ul className="report-preview__sources-list">
             {sources.map((source) => (
-              <li key={source.url} className="product-page__sources-item">
+              <li key={source.url} className="report-preview__sources-item">
                 <a
                   href={source.url}
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="product-page__source-link"
+                  className="report-preview__source-link"
                 >
                   {source.label.trim().length > 0 ? source.label : source.url}
                 </a>
-                <p className="product-page__source-url">{source.url}</p>
+                <p className="report-preview__source-url">{source.url}</p>
               </li>
             ))}
           </ul>
-        </section>
+        </ReportSection>
       ) : null}
     </section>
   );

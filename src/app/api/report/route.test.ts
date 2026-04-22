@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { POST } from "./route";
 import { getProductContext } from "@/lib/data";
 import { generateFallbackReport } from "@/lib/generate-report";
+import { clearReportCache } from "@/lib/report-cache";
 import type { DeforestationReport } from "@/lib/report-types";
 
 const { generateAIReportMock } = vi.hoisted(() => ({
@@ -34,6 +35,7 @@ const fallbackReport = (id: string): DeforestationReport => {
 describe("POST /api/report", () => {
   beforeEach(() => {
     generateAIReportMock.mockReset();
+    clearReportCache();
     delete process.env.ANTHROPIC_API_KEY;
     vi.spyOn(console, "info").mockImplementation(() => undefined);
     vi.spyOn(console, "warn").mockImplementation(() => undefined);
@@ -140,5 +142,50 @@ describe("POST /api/report", () => {
 
     expect(response.status).toBe(400);
     expect(await readJson(response)).toEqual({ error: "Invalid request body" });
+  });
+
+  it("caches successful AI reports and skips Claude on the next request for the same product", async () => {
+    process.env.ANTHROPIC_API_KEY = "sk-test";
+    const aiReport = fallbackReport("nutella-750g");
+    generateAIReportMock.mockResolvedValue(aiReport);
+
+    const first = await POST(makeRequest({ productId: "nutella-750g" }));
+    const second = await POST(makeRequest({ productId: "nutella-750g" }));
+
+    expect(first.status).toBe(200);
+    expect(second.status).toBe(200);
+    expect(await readJson(first)).toEqual(aiReport);
+    expect(await readJson(second)).toEqual(aiReport);
+    expect(generateAIReportMock).toHaveBeenCalledTimes(1);
+  });
+
+  it("does not cache deterministic fallback reports, so a later AI success is still reachable", async () => {
+    process.env.ANTHROPIC_API_KEY = "sk-test";
+    const aiReport = fallbackReport("nutella-750g");
+    generateAIReportMock.mockResolvedValueOnce(null).mockResolvedValueOnce(aiReport);
+
+    const first = await POST(makeRequest({ productId: "nutella-750g" }));
+    const second = await POST(makeRequest({ productId: "nutella-750g" }));
+
+    expect(await readJson(first)).toEqual(fallbackReport("nutella-750g"));
+    expect(await readJson(second)).toEqual(aiReport);
+    expect(generateAIReportMock).toHaveBeenCalledTimes(2);
+  });
+
+  it("caches per product id, so different products still trigger separate AI calls", async () => {
+    process.env.ANTHROPIC_API_KEY = "sk-test";
+    const nutellaReport = fallbackReport("nutella-750g");
+    const cadburyReport = fallbackReport("cadbury-dairy-milk");
+    generateAIReportMock.mockImplementation(({ context }: { context: { product: { id: string } } }) =>
+      Promise.resolve(
+        context.product.id === "nutella-750g" ? nutellaReport : cadburyReport,
+      ),
+    );
+
+    await POST(makeRequest({ productId: "nutella-750g" }));
+    await POST(makeRequest({ productId: "cadbury-dairy-milk" }));
+    await POST(makeRequest({ productId: "nutella-750g" }));
+
+    expect(generateAIReportMock).toHaveBeenCalledTimes(2);
   });
 });
