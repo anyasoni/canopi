@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Report } from "@/components/Report";
@@ -7,6 +8,26 @@ import "../../catalogue.css";
 
 type ProductPageProps = {
   params: Promise<{ id: string }>;
+};
+
+export const generateMetadata = async ({
+  params,
+}: ProductPageProps): Promise<Metadata> => {
+  const { id } = await params;
+  const product = getProductById(id);
+  if (!product) {
+    return {
+      title: {
+        absolute: "Product not found | Canopi",
+      },
+    };
+  }
+  return {
+    title: {
+      absolute: `${product.name} — Deforestation Risk | Canopi`,
+    },
+    description: `Deforestation risk report for ${product.name} by ${product.brand}.`,
+  };
 };
 
 const ProductPage = async ({ params }: ProductPageProps) => {

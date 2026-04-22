@@ -5,7 +5,11 @@ import { getAllProducts } from "@/lib/data";
 import "./catalogue.css";
 
 export const metadata: Metadata = {
-  title: "Canopi - Is your product linked to deforestation?",
+  title: {
+    absolute: "Canopi — Is your product linked to deforestation?",
+  },
+  description:
+    "Browse a curated catalogue of everyday products and open a plain-English deforestation risk report for each one.",
 };
 
 export default function HomePage() {

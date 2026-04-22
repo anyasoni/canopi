@@ -8,9 +8,11 @@ import { parseDeforestationReport } from "./validate-report";
 
 const DEFAULT_MODEL = "claude-sonnet-4-6";
 const DEFAULT_AI_MAX_ATTEMPTS = 2;
-const DEFAULT_AI_REQUEST_TIMEOUT_MS = 12000;
+const DEFAULT_AI_REQUEST_TIMEOUT_MS = 30000;
 const DEFAULT_AI_RETRY_BASE_MS = 400;
 const DEFAULT_AI_MAX_TOKENS = 1024;
+const AI_REQUEST_TIMEOUT_MIN_MS = 1000;
+const AI_REQUEST_TIMEOUT_MAX_MS = 120000;
 const REPORT_TOOL_NAME = "emit_deforestation_report";
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
@@ -57,8 +59,8 @@ const AI_MAX_ATTEMPTS = resolvePositiveIntegerEnv({
 const AI_REQUEST_TIMEOUT_MS = resolvePositiveIntegerEnv({
   name: "ANTHROPIC_TIMEOUT_MS",
   fallback: DEFAULT_AI_REQUEST_TIMEOUT_MS,
-  min: 1000,
-  max: 60000,
+  min: AI_REQUEST_TIMEOUT_MIN_MS,
+  max: AI_REQUEST_TIMEOUT_MAX_MS,
 });
 const AI_RETRY_BASE_MS = resolvePositiveIntegerEnv({
   name: "ANTHROPIC_RETRY_BASE_MS",

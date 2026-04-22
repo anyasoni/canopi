@@ -27,7 +27,7 @@ export const LoadingReport = () => {
   }, []);
 
   return (
-    <section className="loading-report" aria-live="polite">
+    <section className="report-preview loading-report" aria-live="polite">
       <div className="loading-report__header">
         <p className="loading-report__eyebrow">AI analysis in progress</p>
         <p className="loading-report__title">Our analyst is writing your report...</p>

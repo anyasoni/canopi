@@ -4,8 +4,11 @@ import { getProductContext } from "@/lib/data";
 import { generateAIReport } from "@/lib/generate-ai-report";
 import { generateFallbackReport } from "@/lib/generate-report";
 import type { DeforestationReport } from "@/lib/report-types";
+import { getCachedReport, setCachedReport } from "@/lib/report-cache";
 import { ReportPostBodySchema } from "@/lib/schemas/report-post-body";
 import type { ProductContext } from "@/lib/types";
+
+export const maxDuration = 60;
 
 const readJsonRequestBody = async (
   req: Request,
@@ -54,18 +57,26 @@ const resolveReportForContext = async (
   context: ProductContext,
 ): Promise<DeforestationReport> => {
   const productId = context.product.id;
+
+  const cached = getCachedReport(productId);
+  if (cached) {
+    console.info(`[report] ${productId}: cache hit, returning cached AI report`);
+    return cached;
+  }
+
   const apiKey = process.env.ANTHROPIC_API_KEY?.trim() ?? "";
   if (apiKey.length === 0) {
     console.info(`[report] ${productId}: no ANTHROPIC_API_KEY, using deterministic fallback`);
     return generateFallbackReport(context);
   }
-  console.info(`[report] ${productId}: requesting AI report from Claude`);
+  console.info(`[report] ${productId}: cache miss, requesting AI report from Claude`);
   const startedAt = Date.now();
   try {
     const aiReport = await generateAIReport({ apiKey, context });
     const elapsed = Date.now() - startedAt;
     if (aiReport) {
-      console.info(`[report] ${productId}: AI report ready in ${elapsed}ms`);
+      console.info(`[report] ${productId}: AI report ready in ${elapsed}ms, caching`);
+      setCachedReport(productId, aiReport);
       return aiReport;
     }
     console.warn(
