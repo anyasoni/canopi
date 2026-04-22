@@ -29,7 +29,8 @@ export const LoadingReport = () => {
   return (
     <section className="loading-report" aria-live="polite">
       <div className="loading-report__header">
-        <p className="loading-report__title">Analysing supply chain...</p>
+        <p className="loading-report__eyebrow">AI analysis in progress</p>
+        <p className="loading-report__title">Our analyst is writing your report...</p>
         <p className="loading-report__status">{getLoadingMessageAtIndex(messageIndex)}</p>
       </div>
 

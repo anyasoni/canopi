@@ -53,15 +53,27 @@ const parseReportPostBody = (
 const resolveReportForContext = async (
   context: ProductContext,
 ): Promise<DeforestationReport> => {
+  const productId = context.product.id;
   const apiKey = process.env.ANTHROPIC_API_KEY?.trim() ?? "";
   if (apiKey.length === 0) {
+    console.info(`[report] ${productId}: no ANTHROPIC_API_KEY, using deterministic fallback`);
     return generateFallbackReport(context);
   }
+  console.info(`[report] ${productId}: requesting AI report from Claude`);
+  const startedAt = Date.now();
   try {
     const aiReport = await generateAIReport({ apiKey, context });
-    return aiReport ?? generateFallbackReport(context);
+    const elapsed = Date.now() - startedAt;
+    if (aiReport) {
+      console.info(`[report] ${productId}: AI report ready in ${elapsed}ms`);
+      return aiReport;
+    }
+    console.warn(
+      `[report] ${productId}: AI report unavailable after ${elapsed}ms, falling back to deterministic`,
+    );
+    return generateFallbackReport(context);
   } catch (err) {
-    console.error("generateAIReport failed", err);
+    console.error(`[report] ${productId}: AI report threw, falling back`, err);
     return generateFallbackReport(context);
   }
 };
@@ -79,9 +91,11 @@ export const POST = async (req: Request) => {
 
   const context = getProductContext(bodyResult.productId);
   if (!context) {
+    console.warn(`[report] ${bodyResult.productId}: product not found`);
     return NextResponse.json({ error: "Product not found" }, { status: 404 });
   }
 
+  console.info(`[report] ${bodyResult.productId}: generating report for ${context.product.name}`);
   const report = await resolveReportForContext(context);
   return NextResponse.json(report);
 };

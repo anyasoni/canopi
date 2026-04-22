@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { ReportRiskTier } from "./enums";
-import { parseDeforestationReport, stripJsonFromMarkdownFences } from "./validate-report";
+import { parseDeforestationReport } from "./validate-report";
 
 const minimalValidReport = () => {
   return {
@@ -35,34 +35,6 @@ const minimalValidReport = () => {
     alternatives: [],
   };
 };
-
-describe("stripJsonFromMarkdownFences", () => {
-  it("trims plain JSON", () => {
-    expect(stripJsonFromMarkdownFences('  {"a":1}  ')).toBe('{"a":1}');
-  });
-
-  it("removes json-markdown fences", () => {
-    const inner = '{"ok":true}';
-    expect(stripJsonFromMarkdownFences("```json\n" + inner + "\n```")).toBe(inner);
-  });
-
-  it("removes generic code fences", () => {
-    const inner = '{"ok":true}';
-    expect(stripJsonFromMarkdownFences("```\n" + inner + "\n```")).toBe(inner);
-  });
-
-  it("handles CRLF line endings in fences", () => {
-    const inner = '{"ok":true}';
-    expect(stripJsonFromMarkdownFences("```json\r\n" + inner + "\r\n```")).toBe(inner);
-  });
-
-  it("strips a leading preamble before the fenced block", () => {
-    const inner = '{"ok":true}';
-    expect(
-      stripJsonFromMarkdownFences("Here is the JSON:\n\n```json\n" + inner + "\n```"),
-    ).toBe(inner);
-  });
-});
 
 describe("parseDeforestationReport", () => {
   it("accepts a minimal valid report", () => {

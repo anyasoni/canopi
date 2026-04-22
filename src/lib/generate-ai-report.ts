@@ -4,37 +4,132 @@ import type { ProductContext } from "./types";
 import type { DeforestationReport } from "./report-types";
 import { DeforestationReportSchema } from "./schemas/deforestation-report";
 import { reportRiskTierFromScore } from "./risk-tier";
-import { parseDeforestationReport, stripJsonFromMarkdownFences } from "./validate-report";
+import { parseDeforestationReport } from "./validate-report";
 
-const MODEL = "claude-sonnet-4-20250514";
-const AI_MAX_ATTEMPTS = 3;
-const AI_REQUEST_TIMEOUT_MS = 9000;
-const AI_RETRY_BASE_MS = 400;
+const DEFAULT_MODEL = "claude-sonnet-4-6";
+const DEFAULT_AI_MAX_ATTEMPTS = 2;
+const DEFAULT_AI_REQUEST_TIMEOUT_MS = 12000;
+const DEFAULT_AI_RETRY_BASE_MS = 400;
+const DEFAULT_AI_MAX_TOKENS = 1024;
+const REPORT_TOOL_NAME = "emit_deforestation_report";
 
-const DEFORESTATION_REPORT_JSON_SCHEMA = JSON.stringify(
-  zodToJsonSchema(DeforestationReportSchema, { name: "DeforestationReport" }),
-  null,
-  2,
-);
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === "object" && value !== null && !Array.isArray(value);
 
-const ANALYST_SYSTEM_PROMPT = [
-  "You are a deforestation risk analyst writing for consumers.",
-  "",
-  "You receive structured JSON about a product, its parent company, and its commodities.",
-  "",
-  "Respond with a single JSON object only (no markdown fences). The object MUST conform to this JSON Schema:",
-  DEFORESTATION_REPORT_JSON_SCHEMA,
-  "",
-  "Rules:",
-  "- Write in plain English for a non-expert.",
-  "- Be honest about uncertainty - distinguish company claims from independent evidence.",
-  "- Where claims conflict with NGO findings, highlight the tension.",
-  "- Never invent facts beyond the input JSON.",
-  "- Keep verdict summary to 1-2 sentences; commodity explanations 1-2 sentences each; certification verdicts 1-2 sentences; company summary 2-3 sentences; bottomLine 2-3 sentences.",
-  "- verdict.score must match the product riskScore from the input.",
-  "- verdict.level must be \"low\" for scores 1-3, \"moderate\" for 4-6, \"high\" for 7-10.",
-  '- Every alternatives[].id must appear in the input product\'s "alternatives" array; if that array is empty, return an empty alternatives array.',
-].join("\n");
+const resolveModelId = (): string => {
+  const override = process.env.ANTHROPIC_MODEL?.trim();
+  if (override && override.length > 0) {
+    return override;
+  }
+  return DEFAULT_MODEL;
+};
+
+const resolvePositiveIntegerEnv = ({
+  name,
+  fallback,
+  min,
+  max,
+}: Readonly<{ name: string; fallback: number; min: number; max: number }>): number => {
+  const raw = process.env[name]?.trim();
+  if (!raw) {
+    return fallback;
+  }
+
+  if (!/^\d+$/.test(raw)) {
+    console.warn(`[generateAIReport] ignoring ${name}=${raw}; expected integer in [${min}, ${max}]`);
+    return fallback;
+  }
+
+  const parsed = Number(raw);
+  if (!Number.isSafeInteger(parsed) || parsed < min || parsed > max) {
+    console.warn(`[generateAIReport] ignoring ${name}=${raw}; expected integer in [${min}, ${max}]`);
+    return fallback;
+  }
+  return parsed;
+};
+
+const AI_MAX_ATTEMPTS = resolvePositiveIntegerEnv({
+  name: "ANTHROPIC_MAX_ATTEMPTS",
+  fallback: DEFAULT_AI_MAX_ATTEMPTS,
+  min: 1,
+  max: 5,
+});
+const AI_REQUEST_TIMEOUT_MS = resolvePositiveIntegerEnv({
+  name: "ANTHROPIC_TIMEOUT_MS",
+  fallback: DEFAULT_AI_REQUEST_TIMEOUT_MS,
+  min: 1000,
+  max: 60000,
+});
+const AI_RETRY_BASE_MS = resolvePositiveIntegerEnv({
+  name: "ANTHROPIC_RETRY_BASE_MS",
+  fallback: DEFAULT_AI_RETRY_BASE_MS,
+  min: 0,
+  max: 5000,
+});
+const AI_MAX_TOKENS = resolvePositiveIntegerEnv({
+  name: "ANTHROPIC_MAX_TOKENS",
+  fallback: DEFAULT_AI_MAX_TOKENS,
+  min: 256,
+  max: 4096,
+});
+
+const isToolInputSchema = (value: unknown): value is Anthropic.Tool.InputSchema => {
+  if (!isRecord(value)) {
+    return false;
+  }
+  if (value.type !== "object") {
+    return false;
+  }
+  if ("required" in value) {
+    const required = value.required;
+    if (
+      required !== undefined &&
+      required !== null &&
+      (!Array.isArray(required) || required.some((item) => typeof item !== "string"))
+    ) {
+      return false;
+    }
+  }
+  return true;
+};
+
+const REPORT_TOOL_INPUT_SCHEMA = (() => {
+  const raw = zodToJsonSchema(DeforestationReportSchema);
+  if (!isRecord(raw)) {
+    throw new Error("Deforestation report tool schema must be an object");
+  }
+  const { $schema, ...rest } = raw;
+  void $schema;
+  if (!isToolInputSchema(rest)) {
+    throw new Error("Deforestation report tool schema must be a JSON object schema");
+  }
+  return rest;
+})();
+
+const REPORT_TOOL: Anthropic.Tool = {
+  name: REPORT_TOOL_NAME,
+  description:
+    "Emit the deforestation-risk report for the product in the user message. " +
+    "Populate every required field. verdict.score must equal the product's " +
+    "riskScore and verdict.level must reflect its tier (low: 1-3, moderate: 4-6, high: 7-10). " +
+    "Only include alternatives whose id appears in the product's alternatives array.",
+  input_schema: REPORT_TOOL_INPUT_SCHEMA,
+};
+
+const ANALYST_SYSTEM_PROMPT =
+  "You are a deforestation risk analyst writing for consumers.\n" +
+  "\n" +
+  "You receive structured JSON about a product, its parent company, and its " +
+  "commodities. Analyse it and emit the report by calling the " +
+  `\`${REPORT_TOOL_NAME}\` tool. Do not produce any plain-text output.\n` +
+  "\n" +
+  "Rules:\n" +
+  "- Write in plain English for a non-expert.\n" +
+  "- Be honest about uncertainty: distinguish company claims from independent evidence.\n" +
+  "- Where claims conflict with NGO findings, highlight the tension.\n" +
+  "- Never invent facts beyond the input JSON.\n" +
+  "- Keep verdict.summary to 1-2 sentences; each commodity explanation 1-2 sentences; " +
+  "each certification verdict 1-2 sentences; company.summary 2-3 sentences; bottomLine 2-3 sentences.";
 
 const sleep = (ms: number): Promise<void> =>
   new Promise((resolve) => {
@@ -58,28 +153,23 @@ const withTimeout = <T>(promise: Promise<T>, ms: number): Promise<T> =>
     );
   });
 
-const isRecord = (value: unknown): value is Record<string, unknown> =>
-  typeof value === "object" && value !== null && !Array.isArray(value);
-
-const extractTextContent = (message: { content: unknown }): string => {
+const extractToolUseInput = (message: { content: unknown }): unknown => {
   if (!Array.isArray(message.content)) {
-    return "";
+    return null;
   }
-  const parts: string[] = [];
   for (const block of message.content) {
     if (!isRecord(block)) {
       continue;
     }
-    if (block.type !== "text") {
+    if (block.type !== "tool_use") {
       continue;
     }
-    const text = block.text;
-    if (typeof text !== "string") {
+    if (block.name !== REPORT_TOOL_NAME) {
       continue;
     }
-    parts.push(text);
+    return block.input ?? null;
   }
-  return parts.join("\n").trim();
+  return null;
 };
 
 const reportMatchesProductContext = (
@@ -105,6 +195,7 @@ const reportMatchesProductContext = (
 const fetchReportFromModel = async (
   client: Anthropic,
   context: ProductContext,
+  model: string,
 ): Promise<DeforestationReport | null> => {
   const userPayload = {
     product: context.product,
@@ -115,9 +206,17 @@ const fetchReportFromModel = async (
   try {
     const message = await withTimeout(
       client.messages.create({
-        model: MODEL,
-        max_tokens: 1024,
-        system: ANALYST_SYSTEM_PROMPT,
+        model,
+        max_tokens: AI_MAX_TOKENS,
+        system: [
+          {
+            type: "text",
+            text: ANALYST_SYSTEM_PROMPT,
+            cache_control: { type: "ephemeral" },
+          },
+        ],
+        tools: [{ ...REPORT_TOOL, cache_control: { type: "ephemeral" } }],
+        tool_choice: { type: "tool", name: REPORT_TOOL_NAME },
         messages: [
           {
             role: "user",
@@ -128,25 +227,26 @@ const fetchReportFromModel = async (
       AI_REQUEST_TIMEOUT_MS,
     );
 
-    const rawText = extractTextContent(message);
-    const jsonText = stripJsonFromMarkdownFences(rawText);
-
-    let parsed: unknown;
-    try {
-      parsed = JSON.parse(jsonText);
-    } catch {
+    const toolInput = extractToolUseInput(message);
+    if (toolInput === null) {
+      console.warn("generateAIReport: model did not call the report tool");
       return null;
     }
 
-    const report = parseDeforestationReport(parsed);
+    const report = parseDeforestationReport(toolInput);
     if (!report) {
+      console.warn("generateAIReport: tool input did not match report schema");
       return null;
     }
     if (!reportMatchesProductContext(report, context)) {
+      console.warn(
+        "generateAIReport: tool input did not match product context (score or alternatives)",
+      );
       return null;
     }
     return report;
-  } catch {
+  } catch (err) {
+    console.warn("generateAIReport: model request failed", err);
     return null;
   }
 };
@@ -155,17 +255,26 @@ export const generateAIReport = async (
   params: Readonly<{ apiKey: string; context: ProductContext }>,
 ): Promise<DeforestationReport | null> => {
   const { apiKey, context } = params;
+  const productId = context.product.id;
+  const model = resolveModelId();
   const client = new Anthropic({ apiKey });
 
   for (let attempt = 0; attempt < AI_MAX_ATTEMPTS; attempt += 1) {
     if (attempt > 0) {
       await sleep(AI_RETRY_BASE_MS * attempt);
     }
-    const report = await fetchReportFromModel(client, context);
+    console.info(
+      `[generateAIReport] ${productId}: attempt ${attempt + 1}/${AI_MAX_ATTEMPTS} to ${model}`,
+    );
+    const report = await fetchReportFromModel(client, context, model);
     if (report) {
+      console.info(
+        `[generateAIReport] ${productId}: attempt ${attempt + 1} produced a valid report`,
+      );
       return report;
     }
   }
+  console.warn(`[generateAIReport] ${productId}: exhausted ${AI_MAX_ATTEMPTS} attempts`);
 
   return null;
 };
