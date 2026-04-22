@@ -5,7 +5,7 @@ import { getAllProducts } from "@/lib/data";
 import "./catalogue.css";
 
 export const metadata: Metadata = {
-  title: "Canopi — Is your product linked to deforestation?",
+  title: "Canopi - Is your product linked to deforestation?",
 };
 
 export default function HomePage() {

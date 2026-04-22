@@ -1,6 +1,13 @@
 import { z } from "zod";
 import { CertificationStrength, CommodityAmount } from "../enums";
 
+const ProductSourceSchema = z
+  .object({
+    label: z.string(),
+    url: z.string().url(),
+  })
+  .strict();
+
 const CommoditySchema = z
   .object({
     id: z.string(),
@@ -23,15 +30,12 @@ const CompanySchema = z
   .object({
     id: z.string(),
     name: z.string(),
-    deforestationPolicy: z.union([z.string(), z.null()]),
+    deforestationPolicy: z.string().nullable(),
     traceabilitySummary: z.string(),
     sourcingRegions: z.array(z.string()),
     certifications: z.array(z.string()),
     incidents: z.array(CompanyIncidentSchema),
-    ngosScore: z
-      .union([z.string(), z.null()])
-      .optional()
-      .transform((value) => (value === undefined ? null : value)),
+    ngosScore: z.string().nullable().default(null),
   })
   .strict();
 
@@ -58,7 +62,7 @@ const ProductSchema = z
     brand: z.string(),
     companyId: z.string(),
     category: z.string(),
-    barcode: z.string(),
+    barcode: z.string().optional(),
     imageUrl: z.string(),
     commodities: z.array(ProductCommoditySchema),
     certifications: z.array(ProductCertificationSchema),
@@ -66,7 +70,7 @@ const ProductSchema = z
     riskFactors: z.array(z.string()),
     mitigatingFactors: z.array(z.string()),
     alternatives: z.array(z.string()),
-    sources: z.array(z.string()),
+    sources: z.array(ProductSourceSchema),
   })
   .strict();
 
@@ -83,6 +87,7 @@ export type CompanyIncident = z.infer<typeof CompanyIncidentSchema>;
 export type Company = z.infer<typeof CompanySchema>;
 export type ProductCommodity = z.infer<typeof ProductCommoditySchema>;
 export type ProductCertification = z.infer<typeof ProductCertificationSchema>;
+export type ProductSource = z.infer<typeof ProductSourceSchema>;
 export type Product = z.infer<typeof ProductSchema>;
 export type Dataset = z.infer<typeof DatasetSchema>;
 

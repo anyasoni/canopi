@@ -100,7 +100,7 @@ const buildCompany = (context: ProductContext): ReportCompany => {
 
 const bottomLineFromLevel = (level: ReportRiskTier, productName: string): string => {
   if (level === ReportRiskTier.Low) {
-    return `${productName} sits in a lower editorial risk band, but deforestation risk is never zero—especially for tropical commodities. Use this as orientation, not a guarantee.`;
+    return `${productName} sits in a lower editorial risk band, but deforestation risk is never zero, especially for tropical commodities. Use this as orientation, not a guarantee.`;
   }
   if (level === ReportRiskTier.Moderate) {
     return `${productName} has a moderate editorial risk score: certifications and company programmes may help, but there are still credible supply-chain tensions worth weighing before you buy again.`;

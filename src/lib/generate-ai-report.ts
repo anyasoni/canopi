@@ -27,7 +27,7 @@ const ANALYST_SYSTEM_PROMPT = [
   "",
   "Rules:",
   "- Write in plain English for a non-expert.",
-  "- Be honest about uncertainty — distinguish company claims from independent evidence.",
+  "- Be honest about uncertainty - distinguish company claims from independent evidence.",
   "- Where claims conflict with NGO findings, highlight the tension.",
   "- Never invent facts beyond the input JSON.",
   "- Keep verdict summary to 1-2 sentences; commodity explanations 1-2 sentences each; certification verdicts 1-2 sentences; company summary 2-3 sentences; bottomLine 2-3 sentences.",

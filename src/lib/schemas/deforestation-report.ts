@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { ReportRiskTier } from "../enums";
+import { CertificationStrength, CommodityAmount, ReportRiskTier } from "../enums";
 
 const ReportVerdictSchema = z
   .object({
@@ -13,7 +13,7 @@ const ReportCommoditySchema = z
   .object({
     id: z.string(),
     name: z.string(),
-    amount: z.string(),
+    amount: z.nativeEnum(CommodityAmount),
     riskTier: z.nativeEnum(ReportRiskTier),
     explanation: z.string(),
   })
@@ -23,7 +23,7 @@ const ReportCertificationSchema = z
   .object({
     name: z.string(),
     scope: z.string(),
-    strength: z.string(),
+    strength: z.nativeEnum(CertificationStrength),
     verdict: z.string(),
   })
   .strict();

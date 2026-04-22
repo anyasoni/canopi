@@ -29,15 +29,17 @@ const riskBadgeStyles: Record<
 
 type RiskBadgeProps = {
   score: number;
+  size?: "sm" | "lg";
 };
 
-export const RiskBadge = ({ score }: RiskBadgeProps) => {
+export const RiskBadge = ({ score, size = "sm" }: RiskBadgeProps) => {
   const tier = reportRiskTierFromScore(score);
   const label = riskBadgeLabel(tier);
   const { pill } = riskBadgeStyles[tier];
+  const sizeClass = size === "lg" ? "risk-badge--lg" : "";
 
   return (
-    <span className={`risk-badge ${pill}`}>
+    <span className={`risk-badge ${pill} ${sizeClass}`.trim()}>
       <span className={`risk-badge__dot`} aria-hidden />
       <span className="risk-badge__score">{score} </span>
       <span>{label}</span>
