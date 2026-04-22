@@ -1,47 +1,173 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Canopi
 
-## Getting Started
+> Is your product linked to deforestation?
 
-First, install dependencies:
+Canopi is a small web app that takes an everyday supermarket product and produces a plain-English deforestation-risk report for it — covering the commodities in the product, the strength of its certifications, the parent company's track record, and a bottom-line takeaway with suggested alternatives.
+
+The app pairs a curated dataset with an AI synthesis layer (Claude) that turns the raw data into a readable consumer-facing report. When the AI is unavailable, a deterministic fallback generator produces the same shape of report from the dataset directly, so the app is always functional.
+
+## Features
+
+- Browsable catalogue of curated everyday products with search and risk badges
+- Per-product detail page with an AI-generated deforestation-risk report
+- Structured report sections: verdict, commodities, certifications, company (with incident callouts), bottom line, alternatives, and sources
+- **Deterministic fallback** when `ANTHROPIC_API_KEY` is missing or the AI call fails — the app never hard-breaks on a missing key
+- Server-side in-memory cache for AI reports + client-side same-tab cache so back-navigation is instant
+- Mobile-first responsive layout, dark-mode friendly, accessible touch targets
+- End-to-end typed: Zod-validated dataset and report schemas on both request and response paths
+
+## Tech stack
+
+- **Next.js 16** (App Router) on **React 19**
+- **TypeScript** throughout
+- **Tailwind CSS v4** (CSS-first `@theme` tokens) + feature-scoped stylesheets
+- **Zod** for dataset, request, and report validation
+- **@anthropic-ai/sdk** — Anthropic models for report generation (via tool calling for structured JSON)
+- **Vitest** for unit tests
+- **lucide-react** for icons
+
+## Dataset
+
+The catalogue is hand-curated and lives in `src/data/dataset.json`:
+
+- **19 products**
+- **17 parent companies**
+- **6 commodities** (palm oil, cocoa, soy, coffee, tea, dairy/cattle feed)
+
+Each product carries its own risk score (1–10), certifications, ingredient amounts, riskFactors, mitigatingFactors, alternatives, and source URLs. Each company carries its traceability summary, sourcing regions, and documented incidents. Everything is point-in-time and editorial — see **Limitations** below.
+
+## Getting started
+
+### Prerequisites
+
+- Node.js 20+
+- Yarn 1.x (the repo is pinned to `yarn@1.22.22` via `packageManager`)
+
+### Install
 
 ```bash
 yarn install
 ```
 
-Then run the development server:
+### Run the dev server
 
 ```bash
 yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) — the app works out of the box with the deterministic fallback generator; no API key required.
 
-## Environment variables
+### Enable AI reports (optional)
 
-AI-backed deforestation reports use the Anthropic API when a key is present.
-
-1. Copy the example file:
+1. Copy the example env file:
 
    ```bash
    cp .env.example .env.local
    ```
 
-2. Set `ANTHROPIC_API_KEY` in `.env.local` (see [Anthropic console](https://console.anthropic.com/)).
+2. Set `ANTHROPIC_API_KEY` in `.env.local` (get one at the [Anthropic console](https://console.anthropic.com/)).
+3. Restart the dev server.
 
-If the key is missing or empty, `POST /api/report` still works and returns the **rule-based fallback** report. In production (for example on Vercel), configure the same variable in the project’s environment settings instead of committing secrets.
+With a valid key, `POST /api/report` will call Claude; on timeout, rate-limit, or malformed response it transparently falls back to the deterministic generator.
 
-## Tests
+## Scripts
 
-Unit tests use [Vitest](https://vitest.dev/). After `yarn install`, run:
+| Command          | What it does                                    |
+| ---------------- | ----------------------------------------------- |
+| `yarn dev`       | Start the Next.js dev server (Turbopack)        |
+| `yarn build`     | Production build                                |
+| `yarn start`     | Run the production build                        |
+| `yarn lint`      | Lint the project with ESLint                    |
+| `yarn test:run`  | Single-run Vitest (CI mode)                     |
 
-```bash
-yarn test
+## Environment variables
+
+All of these are optional except `ANTHROPIC_API_KEY`, which itself is optional but without it the predefined report will be displayed.
+
+| Variable                  | Default | Notes                                                                 |
+| ------------------------- | ------- | --------------------------------------------------------------------- |
+| `ANTHROPIC_API_KEY`       | —       | When set, reports are generated by Claude. Missing → fallback.        |
+| `ANTHROPIC_MODEL`         | `claude-sonnet-4-6` | Override the Claude model.                                 |
+| `ANTHROPIC_TIMEOUT_MS`    | `30000` | Per-attempt timeout. Min `1000`, max `120000`.                        |
+| `ANTHROPIC_MAX_ATTEMPTS`  | `2`     | AI attempts before falling back. Range 1–5.                           |
+| `ANTHROPIC_RETRY_BASE_MS` | `400`   | Backoff base between attempts.                                        |
+| `ANTHROPIC_MAX_TOKENS`    | `1024`  | Output token budget for Claude.                                       |
+| `REPORT_CACHE_TTL_MS`     | `3600000` | Server-side cache TTL for successful AI reports. Min `1000`, max `86400000` (24h). |
+
+## Project structure
+
+```
+src/
+├── app/
+│   ├── layout.tsx              # root layout, Inter font, site metadata
+│   ├── page.tsx                # catalogue (home)
+│   ├── globals.css             # Tailwind @theme tokens + base styles
+│   ├── catalogue.css           # feature-scoped styles
+│   ├── product/[id]/
+│   │   ├── page.tsx            # product detail + report container
+│   │   └── not-found.tsx       # custom 404 for unknown product ids
+│   └── api/report/
+│       ├── route.ts            # POST /api/report — AI + fallback + cache
+│       └── route.test.ts
+├── components/
+│   ├── ProductGrid.tsx, ProductCard.tsx, SearchBar.tsx
+│   ├── Report.tsx              # client component: fetch, cache, render states
+│   ├── LoadingReport.tsx       # skeleton + rotating status messages
+│   ├── ReportSection.tsx       # reusable report section wrapper
+│   ├── AlternativeCard.tsx     # mini product card for "alternatives"
+│   ├── RiskBadge.tsx, Tag.tsx
+├── lib/
+│   ├── data.ts                 # dataset accessors + assembled ProductContext
+│   ├── types.ts
+│   ├── enums.ts                # CommodityAmount, CertificationStrength, ReportRiskTier
+│   ├── schemas/                # Zod schemas for dataset, report, request body
+│   ├── generate-report.ts      # deterministic report generator (fallback)
+│   ├── generate-ai-report.ts   # Claude tool-use report generator
+│   ├── validate-report.ts      # Zod-based parse helper
+│   ├── report-cache.ts         # in-memory server cache (TTL)
+│   ├── report-types.ts
+│   ├── risk-tier.ts, filter-products.ts, commodity-icon.ts
+└── data/
+    └── dataset.json            # hand-curated products / companies / commodities
 ```
 
-That starts Vitest in watch mode. For a single run (for example in CI), use:
+## Testing
+
+Unit tests live next to the code they cover, named `*.test.ts`.
 
 ```bash
-yarn test:run
+yarn test       # watch mode
+yarn test:run   # single pass, CI-friendly
 ```
 
-Test files live next to the code they cover, named `*.test.ts` (for example under `src/lib/`).
+What's tested:
+
+- **`src/lib/`** — data lookups, deterministic report generation, risk-tier mapping, product filtering, report schema parsing, report cache (hit/miss/TTL/clear), commodity icons.
+- **`src/lib/generate-ai-report.test.ts`** — AI path with mocked Anthropic client: happy path, malformed output, schema mismatch, context-check rejection, retries.
+- **`src/app/api/report/route.test.ts`** — request validation, 404s, fallback behavior, cache hits, per-product cache isolation.
+
+## How it works
+
+1. The user loads a product page (`/product/[id]`). The server fetches the product + company + commodities from the dataset and renders the header immediately.
+2. The `<Report>` client component mounts and calls `POST /api/report` with the product id.
+3. The route checks the in-memory cache. On hit, it returns the stored AI report.
+4. On miss, if `ANTHROPIC_API_KEY` is present, it calls Claude with a forced tool-use schema so the model must return JSON matching `DeforestationReportSchema`. Successful results are cached. If Claude fails, times out, or returns something that doesn't satisfy the schema / product constraints, the route falls back to the deterministic generator (not cached).
+5. The client validates the response with the same Zod schema used server-side, then renders it. A module-level client cache means navigating back to an already-viewed product skips the network round-trip and the loading skeleton entirely.
+
+## Deployment
+
+The project is a standard Next.js app and deploys cleanly to Vercel:
+
+1. Push to GitHub, import into Vercel.
+2. Set `ANTHROPIC_API_KEY` (and any other env overrides) in the project's environment settings.
+3. Deploy.
+
+`POST /api/report` declares `maxDuration = 60` so the platform allows enough headroom for the worst case of `ANTHROPIC_MAX_ATTEMPTS × ANTHROPIC_TIMEOUT_MS` before falling back.
+
+## Limitations
+
+- Fixed catalogue — 19 products, 17 companies, 6 commodities.
+- Dataset is point-in-time and editorial; risk scores are curated, not algorithmically derived.
+- Company-level traceability only — no true product-level supply-chain lineage.
+- AI reports can over-interpret sparse inputs; the tool schema and post-generation context check are the guardrails.
+- Server-side cache is in-memory per instance, so it's lost on deploy / cold start. Good enough for this scope; a distributed cache (Redis, etc.) would be a natural upgrade.
